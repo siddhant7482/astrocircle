@@ -1,0 +1,19 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#E6EFE9"/>
+  
+  <!-- Mountains -->
+  <path d="M40 140L80 80L120 120L160 60" stroke="#2F4F4F" stroke-width="2" fill="none"/>
+  <path d="M40 140L100 90L140 120L180 70" stroke="#2F4F4F" stroke-width="2" fill="none"/>
+  
+  <!-- Path -->
+  <path d="M20 160C40 150 60 155 80 140C100 125 120 130 140 120C160 110 180 115 200 110" 
+        stroke="#FFFFFF" 
+        stroke-width="3"
+        stroke-linecap="round"/>
+  
+  <!-- Moon -->
+  <circle cx="160" cy="40" r="20" fill="#FFFFFF"/>
+  
+  <!-- Mountain Fill -->
+  <path d="M0 200V140L80 80L120 120L160 60L200 100V200H0Z" fill="#2F4F4F" fill-opacity="0.8"/>
+</svg> 
