@@ -28,11 +28,6 @@ export async function executeQuery<T = unknown>(
   }
 }
 
-// Helper function to convert coordinates array to string
-function coordinatesToString(coordinates: [number, number]): string {
-  return `${coordinates[0]},${coordinates[1]}`;
-}
-
 // Profile Queries
 export interface UserProfile {
   id: string;
