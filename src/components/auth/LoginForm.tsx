@@ -1,23 +1,21 @@
 "use client"
 
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginForm() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [success, setSuccess] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,7 +34,7 @@ export default function LoginForm() {
 
       if (data.user) {
         // Check if profile exists, create minimal one if not
-        const { data: profile, error: profileError } = await supabase
+        const { error: profileError } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', data.user.id)
@@ -67,9 +65,10 @@ export default function LoginForm() {
           window.location.href = '/dashboard'
         }, 1000)
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Login error:', error)
-      setError(error.message || 'An error occurred during login')
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred during login'
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -145,7 +144,7 @@ export default function LoginForm() {
 
             <div className="mt-6 text-center">
               <p className="text-gray-300">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/register" className="text-blue-400 hover:text-blue-300 font-medium">
                   Sign up
                 </Link>

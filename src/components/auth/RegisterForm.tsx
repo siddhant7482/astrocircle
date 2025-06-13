@@ -65,11 +65,12 @@ export function RegisterForm() {
       
       // 4. Redirect to dashboard
       router.push('/dashboard')
-    } catch (err: any) {
-      if (err.message?.includes('already registered')) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Unknown error occurred')
+      if (error.message?.includes('already registered')) {
         setError('This email is already registered. Please try logging in instead.')
       } else {
-        setError(err.message || 'An error occurred during registration')
+        setError(error.message || 'An error occurred during registration')
       }
     } finally {
       setLoading(false)

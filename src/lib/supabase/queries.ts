@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase';
+import { supabase } from '../supabase';
 
-const supabase = createClient<Database>(
+const supabaseClient = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
@@ -13,7 +14,7 @@ export async function executeQuery<T = any>(
   params: QueryParams = {}
 ): Promise<T[]> {
   try {
-    const { data, error } = await supabase.rpc(queryName, params);
+    const { data, error } = await supabaseClient.rpc(queryName, params);
     
     if (error) {
       console.error(`Error executing query ${queryName}:`, error);
@@ -33,63 +34,72 @@ function coordinatesToString(coordinates: [number, number]): string {
 }
 
 // Profile Queries
-export async function getProfileById(userId: string) {
-  return executeQuery<Database['public']['Tables']['profiles']['Row']>(
-    'get-profile-by-id',
-    { user_id: userId }
-  );
+export interface UserProfile {
+  id: string;
+  email: string;
+  full_name: string | null;
+  birth_date: string | null;
+  birth_place: string | null;
+  birth_time: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
-export async function updateProfile(
-  userId: string,
-  profileData: Partial<{
-    full_name: string;
-    birth_date: string;
-    birth_time: string;
-    birth_place: string;
-    birth_coordinates: string | null;
-  }>
-) {
-  const params: QueryParams = {
-    user_id: userId,
-    full_name: profileData.full_name || null,
-    birth_date: profileData.birth_date || null,
-    birth_time: profileData.birth_time || null,
-    birth_place: profileData.birth_place || null,
-    birth_coordinates: profileData.birth_coordinates || null
-  };
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
 
-  return executeQuery<Database['public']['Tables']['profiles']['Row']>(
-    'update-profile',
-    params
-  );
-}
+    if (error) {
+      console.error('Error fetching user profile:', error);
+      return null;
+    }
 
-export async function createProfile(
-  userId: string,
-  profileData: {
-    email: string;
-    full_name: string;
-    birth_date: string;
-    birth_time: string;
-    birth_place: string;
-    birth_coordinates: string | null;
+    return data;
+  } catch (error) {
+    console.error('Error in getUserProfile:', error);
+    return null;
   }
-) {
-  const params: QueryParams = {
-    user_id: userId,
-    email: profileData.email,
-    full_name: profileData.full_name,
-    birth_date: profileData.birth_date,
-    birth_time: profileData.birth_time,
-    birth_place: profileData.birth_place,
-    birth_coordinates: profileData.birth_coordinates || null
-  };
+}
 
-  return executeQuery<Database['public']['Tables']['profiles']['Row']>(
-    'create-profile',
-    params
-  );
+export async function updateUserProfile(userId: string, updates: Partial<UserProfile>): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', userId);
+
+    if (error) {
+      console.error('Error updating user profile:', error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in updateUserProfile:', error);
+    return false;
+  }
+}
+
+export async function createUserProfile(profile: Omit<UserProfile, 'created_at' | 'updated_at'>): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('profiles')
+      .insert([profile]);
+
+    if (error) {
+      console.error('Error creating user profile:', error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in createUserProfile:', error);
+    return false;
+  }
 }
 
 // Birth Chart Queries

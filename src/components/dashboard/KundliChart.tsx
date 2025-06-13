@@ -12,7 +12,6 @@ export function KundliChart() {
   const [chartSvg, setChartSvg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
 
   async function fetchChart() {
     try {
@@ -45,7 +44,6 @@ export function KundliChart() {
   }, []);
 
   const handleRetry = () => {
-    setRetryCount(prev => prev + 1);
     fetchChart();
   };
 

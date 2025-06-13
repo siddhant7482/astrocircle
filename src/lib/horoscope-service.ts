@@ -39,7 +39,8 @@ export async function getHoroscopeReading(
     return errorData;
   } catch (error) {
     console.error('Error fetching horoscope:', error);
-    throw error;
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    throw new Error(`Failed to fetch horoscope: ${errorMessage}`);
   }
 }
 
