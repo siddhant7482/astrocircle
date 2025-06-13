@@ -55,11 +55,21 @@ export async function getHistoricalReadings(
 }> {
   // In a real application, this would fetch historical data from a database
   // For now, we'll return mock data
-  const aspects = ['health', 'career', 'love', 'wealth'];
+  const aspects = ['health', 'career', 'love', 'wealth'] as const;
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const currentMonth = new Date().getMonth();
   
-  const result: any = {};
+  const result: {
+    health: Array<{ date: string; value: number }>;
+    career: Array<{ date: string; value: number }>;
+    love: Array<{ date: string; value: number }>;
+    wealth: Array<{ date: string; value: number }>;
+  } = {
+    health: [],
+    career: [],
+    love: [],
+    wealth: []
+  };
   
   aspects.forEach(aspect => {
     result[aspect] = Array.from({ length: months }, (_, i) => ({

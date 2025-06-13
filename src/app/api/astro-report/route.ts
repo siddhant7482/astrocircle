@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       message: 'Astro report endpoint - implementation pending',
       data: body 
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to generate astro report' },
       { status: 500 }

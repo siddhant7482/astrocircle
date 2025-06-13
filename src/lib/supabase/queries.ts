@@ -9,7 +9,7 @@ const supabaseClient = createClient<Database>(
 
 export type QueryParams = Record<string, string | number | boolean | null>;
 
-export async function executeQuery<T = any>(
+export async function executeQuery<T = unknown>(
   queryName: string,
   params: QueryParams = {}
 ): Promise<T[]> {
@@ -114,7 +114,7 @@ export async function createBirthChart(
   profileId: string,
   chartData: {
     chart_type: string;
-    chart_data: any;
+    chart_data: Record<string, unknown>;
   }
 ) {
   return executeQuery<Database['public']['Tables']['birth_charts']['Row']>(
