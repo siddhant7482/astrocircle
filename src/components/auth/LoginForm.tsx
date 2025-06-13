@@ -1,120 +1,159 @@
 "use client"
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
-import { useAuth } from '@/lib/AuthContext'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import Link from "next/link";
 
-export function LoginForm() {
-  const router = useRouter()
-  const { isAuthenticated } = useAuth()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-    setError(null)
-  }
+export default function LoginForm() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
-    setLoading(true)
-
-    if (!formData.email || !formData.password) {
-      setError('Please fill in all fields')
-      setLoading(false)
-      return
-    }
+    setIsLoading(true)
+    setError('')
 
     try {
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       })
 
-      if (signInError) {
-        console.error('Sign in error:', signInError)
-        if (signInError.message.toLowerCase().includes('email not confirmed')) {
-          setError('Please verify your email before signing in. Check your inbox for the verification link.')
-        } else if (signInError.message.toLowerCase().includes('invalid login credentials')) {
-          setError('Invalid email or password')
-        } else {
-          setError(signInError.message)
+      if (error) {
+        throw error
+      }
+
+      if (data.user) {
+        // Check if profile exists, create minimal one if not
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .single()
+
+        if (profileError && profileError.code === 'PGRST116') {
+          // Profile doesn't exist, create minimal one
+          const { error: insertError } = await supabase
+            .from('profiles')
+            .insert({
+              id: data.user.id,
+              email: data.user.email,
+              full_name: null,
+              birth_date: null,
+              birth_place: null,
+              birth_time: null,
+            })
+
+          if (insertError) {
+            console.error('Error creating profile:', insertError)
+          }
         }
-        return
+
+        setSuccess('Success! Redirecting...')
+        
+        // Hard redirect to dashboard
+        setTimeout(() => {
+          window.location.href = '/dashboard'
+        }, 1000)
       }
-
-      if (!data?.session) {
-        setError('Failed to create session')
-        return
-      }
-
-      // The AuthProvider will handle the redirection
-
-    } catch (err: any) {
-      console.error('Login error:', err)
-      setError('An unexpected error occurred. Please try again.')
+    } catch (error: any) {
+      console.error('Login error:', error)
+      setError(error.message || 'An error occurred during login')
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
   return (
-    <div className="mx-auto max-w-md space-y-6 p-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Welcome Back</h1>
-        <p className="text-gray-500">Enter your credentials to continue</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+      <div className="w-full max-w-md p-6">
+        <Card className="backdrop-blur-sm bg-white/10 border-white/20">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
+            <CardDescription className="text-gray-300">
+              Sign in to your AstroCircle account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              
+              {success && (
+                <Alert className="border-green-500 bg-green-50 text-green-700">
+                  <CheckCircle className="h-4 w-4" />
+                  <AlertDescription>{success}</AlertDescription>
+                </Alert>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-white">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-white">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="bg-white/10 border-white/20 text-white placeholder:text-gray-400"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing In...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-gray-300">
+                Don't have an account?{' '}
+                <Link href="/register" className="text-blue-400 hover:text-blue-300 font-medium">
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
-          </div>
-        )}
-
-        <div className="space-y-2">
-          <Input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            autoComplete="email"
-            className="w-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-            autoComplete="current-password"
-            className="w-full"
-          />
-        </div>
-
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={loading}
-        >
-          {loading ? 'Signing in...' : 'Sign In'}
-        </Button>
-      </form>
     </div>
   )
 } 

@@ -31,12 +31,29 @@ export function UserProfileCard() {
     setIsEditing(searchParams.get('edit') === 'profile');
   }, [searchParams]);
 
+  async function handleLogin() {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error logging in:', err);
+      setError(err instanceof Error ? err.message : 'Failed to login');
+    }
+  }
+
   async function fetchProfile() {
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       if (sessionError) throw sessionError;
+      
       if (!session) {
-        throw new Error('No active session');
+        setIsLoading(false);
+        return; // Don't throw error, just return to show login button
       }
 
       const { data: profileData, error: profileError } = await supabase
@@ -150,13 +167,27 @@ export function UserProfileCard() {
         </CardHeader>
         <CardContent>
           <p>{error}</p>
+          <Button onClick={fetchProfile} className="mt-4">Retry</Button>
         </CardContent>
       </Card>
     );
   }
 
+  // Show login button if no profile and not loading
   if (!profile) {
-    return null;
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Welcome to AstroCircle</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-4">Please log in to view your astrological profile</p>
+          <Button onClick={handleLogin}>
+            Login with Google
+          </Button>
+        </CardContent>
+      </Card>
+    );
   }
 
   if (isEditing) {
@@ -204,11 +235,9 @@ export function UserProfileCard() {
                 placeholder="Enter your place of birth"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               <Button type="submit">Save Changes</Button>
-              <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
-                Cancel
-              </Button>
+              <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
             </div>
           </form>
         </CardContent>
@@ -219,34 +248,22 @@ export function UserProfileCard() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Welcome {profile.full_name?.split(' ')[0] || 'User'}</CardTitle>
-        <Button variant="outline" onClick={() => setIsEditing(true)}>
-          Edit Profile
-        </Button>
+        <CardTitle>{profile.full_name || 'Your Profile'}</CardTitle>
+        <Button variant="outline" onClick={() => setIsEditing(true)}>Edit</Button>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-1">
-          <p className="text-sm font-medium">Full Name</p>
-          <p className="text-lg text-primary">{profile.full_name || 'Not set'}</p>
+        <div>
+          <Label>Birth Date</Label>
+          <p>{profile.birth_date || 'Not set'}</p>
         </div>
-        <div className="space-y-1">
-          <p className="text-sm font-medium">Date of Birth</p>
-          <p className="text-lg text-primary">{profile.birth_date || 'Not set'}</p>
+        <div>
+          <Label>Birth Time</Label>
+          <p>{profile.birth_time || 'Not set'}</p>
         </div>
-        <div className="space-y-1">
-          <p className="text-sm font-medium">Time of Birth</p>
-          <p className="text-lg text-primary">{profile.birth_time || 'Not set'}</p>
+        <div>
+          <Label>Birth Place</Label>
+          <p>{profile.birth_place || 'Not set'}</p>
         </div>
-        <div className="space-y-1">
-          <p className="text-sm font-medium">Place of Birth</p>
-          <p className="text-lg text-primary">{profile.birth_place || 'Not set'}</p>
-        </div>
-        {profile.zodiac_sign && (
-          <div className="space-y-1">
-            <p className="text-sm font-medium">Zodiac Sign</p>
-            <p className="text-lg text-primary">{profile.zodiac_sign}</p>
-          </div>
-        )}
       </CardContent>
     </Card>
   );

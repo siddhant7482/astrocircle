@@ -37,11 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setIsAuthenticated(!!session)
-      if (event === 'SIGNED_IN') {
-        router.push('/dashboard')
-      } else if (event === 'SIGNED_OUT') {
-        router.push('/login')
-      }
+      setIsLoading(false)
     })
 
     return () => {

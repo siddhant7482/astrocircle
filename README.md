@@ -190,8 +190,8 @@ DEEPSEEK_API_KEY=your_deepseek_api_key
    - Set up authentication providers
 
 5. **Run Development Server**:
-   ```bash
-   npm run dev
+```bash
+npm run dev
    ```
 
 ## API Routes

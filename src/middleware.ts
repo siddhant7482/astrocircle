@@ -2,22 +2,41 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export async function middleware(req: NextRequest) {
+export async function middleware(request: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+  const supabase = createMiddlewareClient({ req: request, res })
 
-  // Refresh session if expired
-  await supabase.auth.getSession()
+  // Check auth state
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  // Skip middleware for static files and API routes
-  if (req.nextUrl.pathname.startsWith('/_next') || 
-      req.nextUrl.pathname.startsWith('/api')) {
+  // Handle auth routes - redirect authenticated users away from login/signup
+  if (['/login', '/signup', '/register'].includes(request.nextUrl.pathname)) {
+    if (session) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
     return res
+  }
+
+  // Protect sensitive routes (but NOT dashboard - let dashboard handle its own auth)
+  const protectedRoutes = ['/profile', '/settings', '/admin']
+  if (!session && protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   return res
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public (public files)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+  ],
 } 
