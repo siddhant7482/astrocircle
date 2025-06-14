@@ -82,7 +82,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
                 <a href="#" className="flex items-center px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-white/15 rounded-lg transition-colors">
                   Horoscope
                 </a>
-                <a href="#" className="flex items-center px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-white/15 rounded-lg transition-colors">
+                <a href="/profile" className="flex items-center px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-white/15 rounded-lg transition-colors">
                   Profile
                 </a>
               </div>

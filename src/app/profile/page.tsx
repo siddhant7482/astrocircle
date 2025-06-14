@@ -2,23 +2,28 @@
 
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { useUser } from "@/lib/hooks/use-user";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function ProfilePage() {
   const { user, loading } = useUser();
-  const router = useRouter();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  if (loading || !user) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-2xl font-semibold text-gray-700">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
+          <p className="text-gray-300">Loading your profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-300">Please log in to access your profile.</p>
+        </div>
       </div>
     );
   }
