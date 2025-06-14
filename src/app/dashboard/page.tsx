@@ -11,7 +11,6 @@ export default function Dashboard() {
   const { user, loading } = useUser()
   const router = useRouter()
   const [isRedirecting, setIsRedirecting] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     if (!loading && !user) {
@@ -19,15 +18,6 @@ export default function Dashboard() {
       router.push('/login')
     }
   }, [user, loading, router])
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
 
   if (loading || isRedirecting) {
     return (
