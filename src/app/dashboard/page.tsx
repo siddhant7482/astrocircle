@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/lib/hooks/use-user'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -46,36 +46,83 @@ export default function Dashboard() {
 
   const AnimatedCard = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
     const [isHovered, setIsHovered] = useState(false)
+    const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 })
+    const cardRef = useRef<HTMLDivElement>(null)
+    
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!cardRef.current) return
+      
+      const card = cardRef.current
+      const rect = card.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      
+      setCardPosition({ x, y })
+    }
+    
+    const handleMouseEnter = () => {
+      setIsHovered(true)
+    }
+    
+    const handleMouseLeave = () => {
+      setIsHovered(false)
+      setCardPosition({ x: 0, y: 0 })
+    }
     
     return (
       <div
-        className="group relative"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        ref={cardRef}
+        className="group relative w-full h-full"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         style={{
           transform: isHovered 
-            ? `perspective(1000px) rotateX(${(mousePosition.y - window.innerHeight / 2) * 0.01}deg) rotateY(${(mousePosition.x - window.innerWidth / 2) * 0.01}deg) translateZ(20px)`
-            : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)',
-          transition: 'transform 0.3s ease-out'
+            ? `perspective(1000px) rotateX(${(cardPosition.y - 150) * 0.05}deg) rotateY(${(cardPosition.x - 150) * 0.05}deg) translateZ(12px) scale(1.02)`
+            : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)',
+          transformStyle: 'preserve-3d',
+          transition: isHovered 
+            ? 'transform 0.1s ease-out, box-shadow 0.3s ease-out' 
+            : 'transform 0.5s ease-out, box-shadow 0.3s ease-out'
         }}
       >
-        {/* Animated gradient background */}
+        {/* Enhanced gradient background with mouse tracking */}
         <div
-          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none"
           style={{
-            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(147, 51, 234, 0.3) 0%, rgba(59, 130, 246, 0.2) 50%, transparent 70%)`,
-            transition: 'background 0.3s ease-out'
+            background: isHovered 
+              ? `radial-gradient(circle 200px at ${cardPosition.x}px ${cardPosition.y}px, rgba(147, 51, 234, 0.4) 0%, rgba(59, 130, 246, 0.3) 30%, rgba(67, 56, 202, 0.2) 60%, transparent 100%)`
+              : 'transparent',
+            transition: 'opacity 0.3s ease-out, background 0.1s ease-out',
+            borderRadius: '0.5rem'
           }}
         />
         
-        {/* Glass card */}
+        {/* Glass card with enhanced effects */}
         <Card 
-          className="relative backdrop-blur-sm bg-white/10 border-white/20 hover:bg-white/15 transition-all duration-300 hover:border-white/30 hover:shadow-2xl hover:shadow-purple-500/20"
+          className="relative backdrop-blur-md bg-white/10 border-white/20 hover:bg-white/15 transition-all duration-300 hover:border-white/30 hover:shadow-2xl hover:shadow-purple-500/20 w-full h-full overflow-hidden"
           style={{
-            animationDelay: `${delay}ms`
+            animationDelay: `${delay}ms`,
+            boxShadow: isHovered 
+              ? '0 25px 50px -12px rgba(147, 51, 234, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)'
+              : '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
           }}
         >
-          {children}
+          {/* Subtle shine effect */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
+            style={{
+              background: `linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%)`,
+              transform: isHovered ? 'translateX(-100%) translateY(-100%) rotate(45deg)' : 'translateX(-200%) translateY(-200%) rotate(45deg)',
+              transition: 'transform 0.6s ease-out, opacity 0.3s ease-out',
+              width: '200%',
+              height: '200%'
+            }}
+          />
+          
+          <div className="relative z-10">
+            {children}
+          </div>
         </Card>
       </div>
     )
