@@ -119,4 +119,8 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Override body background for dashboard pages */
+  body:has([data-dashboard="true"]) {
+    background: transparent !important;
+  }
 }
