@@ -3,15 +3,25 @@
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isAuthenticated, isLoading } = useAuth();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const router = useRouter();
 
-  // Don't show sidebar layout on auth pages or if not authenticated
+  // Define which pages require authentication
   const isAuthPage = pathname?.startsWith('/login') || pathname?.startsWith('/signup') || pathname?.startsWith('/register') || pathname === '/';
+  const isProtectedPage = pathname?.startsWith('/dashboard') || pathname?.startsWith('/profile');
   const showDashboard = !isLoading && isAuthenticated && !isAuthPage;
+
+  // Handle authentication redirection
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && isProtectedPage) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, isLoading, isProtectedPage, router]);
 
   useEffect(() => {
     if (showDashboard) {
@@ -35,6 +45,19 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     }
   }, [showDashboard])
 
+  // Show loading state for protected pages when checking auth
+  if (isLoading && isProtectedPage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <div className="text-center">
+          <div className="h-8 w-8 animate-spin mx-auto mb-4 rounded-full border-2 border-white border-t-transparent"></div>
+          <p className="text-gray-300">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // For auth pages or when not authenticated, just return the children without dashboard layout
   if (!showDashboard) {
     return <main className="h-full">{children}</main>;
   }

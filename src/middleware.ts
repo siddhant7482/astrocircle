@@ -19,8 +19,8 @@ export async function middleware(request: NextRequest) {
     return res
   }
 
-  // Protect sensitive routes (but NOT dashboard - let dashboard handle its own auth)
-  const protectedRoutes = ['/profile', '/settings', '/admin']
+  // Protect sensitive routes (but NOT dashboard or profile - let ConditionalLayout handle these)
+  const protectedRoutes = ['/settings', '/admin']
   if (!session && protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
