@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/lib/hooks/use-user'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -46,18 +46,31 @@ export default function Dashboard() {
 
   const AnimatedCard = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
     const [isHovered, setIsHovered] = useState(false)
-    const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 })
-    const cardRef = useRef<HTMLDivElement>(null)
+    const [rotateX, setRotateX] = useState(0)
+    const [rotateY, setRotateY] = useState(0)
+    const [gradientX, setGradientX] = useState(50)
+    const [gradientY, setGradientY] = useState(50)
     
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!cardRef.current) return
-      
-      const card = cardRef.current
+      const card = e.currentTarget
       const rect = card.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
+      const centerX = rect.width / 2
+      const centerY = rect.height / 2
       
-      setCardPosition({ x, y })
+      // Calculate rotation based on mouse position
+      const rotateXValue = (y - centerY) / centerY * -10
+      const rotateYValue = (x - centerX) / centerX * 10
+      
+      // Calculate gradient position as percentage
+      const gradientXValue = (x / rect.width) * 100
+      const gradientYValue = (y / rect.height) * 100
+      
+      setRotateX(rotateXValue)
+      setRotateY(rotateYValue)
+      setGradientX(gradientXValue)
+      setGradientY(gradientYValue)
     }
     
     const handleMouseEnter = () => {
@@ -66,64 +79,180 @@ export default function Dashboard() {
     
     const handleMouseLeave = () => {
       setIsHovered(false)
-      setCardPosition({ x: 0, y: 0 })
+      setRotateX(0)
+      setRotateY(0)
+      setGradientX(50)
+      setGradientY(50)
     }
     
     return (
       <div
-        ref={cardRef}
-        className="group relative w-full h-full"
+        className="w-full h-full cursor-pointer"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
-          transform: isHovered 
-            ? `perspective(1000px) rotateX(${(cardPosition.y - 150) * 0.05}deg) rotateY(${(cardPosition.x - 150) * 0.05}deg) translateZ(12px) scale(1.02)`
-            : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)',
-          transformStyle: 'preserve-3d',
+          transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) ${isHovered ? 'translateZ(20px) scale(1.05)' : 'translateZ(0px) scale(1)'}`,
           transition: isHovered 
-            ? 'transform 0.1s ease-out, box-shadow 0.3s ease-out' 
-            : 'transform 0.5s ease-out, box-shadow 0.3s ease-out'
+            ? 'transform 0.15s ease-out' 
+            : 'transform 0.6s cubic-bezier(0.23, 1, 0.320, 1)',
+          transformStyle: 'preserve-3d',
+          animation: isHovered ? 'cardFloat 3s ease-in-out infinite, cardGlow 2s ease-in-out infinite alternate' : 'none'
         }}
       >
-        {/* Enhanced gradient background with mouse tracking */}
-        <div
-          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none"
+        <Card 
+          className="relative backdrop-blur-md bg-white/10 border-white/20 transition-all duration-300 w-full h-full overflow-hidden shadow-xl"
           style={{
             background: isHovered 
-              ? `radial-gradient(circle 200px at ${cardPosition.x}px ${cardPosition.y}px, rgba(147, 51, 234, 0.4) 0%, rgba(59, 130, 246, 0.3) 30%, rgba(67, 56, 202, 0.2) 60%, transparent 100%)`
-              : 'transparent',
-            transition: 'opacity 0.3s ease-out, background 0.1s ease-out',
-            borderRadius: '0.5rem'
-          }}
-        />
-        
-        {/* Glass card with enhanced effects */}
-        <Card 
-          className="relative backdrop-blur-md bg-white/10 border-white/20 hover:bg-white/15 transition-all duration-300 hover:border-white/30 hover:shadow-2xl hover:shadow-purple-500/20 w-full h-full overflow-hidden"
-          style={{
-            animationDelay: `${delay}ms`,
+              ? `radial-gradient(circle at ${gradientX}% ${gradientY}%, rgba(147, 51, 234, 0.2) 0%, rgba(59, 130, 246, 0.15) 40%, rgba(255, 255, 255, 0.1) 100%)`
+              : 'rgba(255, 255, 255, 0.1)',
+            borderColor: isHovered ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
             boxShadow: isHovered 
-              ? '0 25px 50px -12px rgba(147, 51, 234, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)'
-              : '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+              ? '0 25px 50px -12px rgba(147, 51, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+              : '0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
+            animationDelay: `${delay}ms`,
+            animation: isHovered ? 'cardPulse 2.5s ease-in-out infinite' : 'none'
           }}
         >
-          {/* Subtle shine effect */}
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
-            style={{
-              background: `linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%)`,
-              transform: isHovered ? 'translateX(-100%) translateY(-100%) rotate(45deg)' : 'translateX(-200%) translateY(-200%) rotate(45deg)',
-              transition: 'transform 0.6s ease-out, opacity 0.3s ease-out',
-              width: '200%',
-              height: '200%'
-            }}
-          />
+          {/* Animated shine effect that loops */}
+          {isHovered && (
+            <div
+              className="absolute inset-0 opacity-30"
+              style={{
+                background: `linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)`,
+                animation: 'shineLoop 2s linear infinite',
+                pointerEvents: 'none'
+              }}
+            />
+          )}
           
-          <div className="relative z-10">
+          {/* Floating orbs animation */}
+          {isHovered && (
+            <>
+              <div
+                className="absolute w-2 h-2 bg-purple-400/60 rounded-full"
+                style={{
+                  animation: 'floatingOrb1 4s ease-in-out infinite',
+                  top: '20%',
+                  left: '10%'
+                }}
+              />
+              <div
+                className="absolute w-3 h-3 bg-blue-400/40 rounded-full"
+                style={{
+                  animation: 'floatingOrb2 3.5s ease-in-out infinite',
+                  top: '70%',
+                  right: '15%'
+                }}
+              />
+              <div
+                className="absolute w-1.5 h-1.5 bg-indigo-400/50 rounded-full"
+                style={{
+                  animation: 'floatingOrb3 3s ease-in-out infinite',
+                  top: '40%',
+                  right: '80%'
+                }}
+              />
+            </>
+          )}
+          
+          {/* Content */}
+          <div className="relative z-10 p-0">
             {children}
           </div>
         </Card>
+        
+        <style jsx>{`
+          @keyframes cardFloat {
+            0%, 100% {
+              transform: translateY(0px) translateZ(20px) scale(1.05);
+            }
+            50% {
+              transform: translateY(-8px) translateZ(25px) scale(1.05);
+            }
+          }
+          
+          @keyframes cardGlow {
+            0% {
+              filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.3));
+            }
+            100% {
+              filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.4));
+            }
+          }
+          
+          @keyframes cardPulse {
+            0%, 100% {
+              backdrop-filter: blur(16px);
+            }
+            50% {
+              backdrop-filter: blur(20px);
+            }
+          }
+          
+          @keyframes shineLoop {
+            0% {
+              transform: translateX(-100%) translateY(-100%) rotate(45deg);
+              opacity: 0;
+            }
+            50% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateX(200%) translateY(200%) rotate(45deg);
+              opacity: 0;
+            }
+          }
+          
+          @keyframes floatingOrb1 {
+            0%, 100% {
+              transform: translate(0px, 0px);
+              opacity: 0.6;
+            }
+            25% {
+              transform: translate(10px, -15px);
+              opacity: 0.8;
+            }
+            50% {
+              transform: translate(-5px, -10px);
+              opacity: 0.4;
+            }
+            75% {
+              transform: translate(15px, 5px);
+              opacity: 0.7;
+            }
+          }
+          
+          @keyframes floatingOrb2 {
+            0%, 100% {
+              transform: translate(0px, 0px) scale(1);
+              opacity: 0.4;
+            }
+            33% {
+              transform: translate(-12px, 8px) scale(1.2);
+              opacity: 0.6;
+            }
+            66% {
+              transform: translate(8px, -12px) scale(0.8);
+              opacity: 0.3;
+            }
+          }
+          
+          @keyframes floatingOrb3 {
+            0%, 100% {
+              transform: translate(0px, 0px);
+              opacity: 0.5;
+            }
+            40% {
+              transform: translate(8px, -8px);
+              opacity: 0.7;
+            }
+            80% {
+              transform: translate(-6px, 4px);
+              opacity: 0.3;
+            }
+          }
+        `}</style>
       </div>
     )
   }
