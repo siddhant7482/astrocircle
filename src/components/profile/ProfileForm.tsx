@@ -15,6 +15,17 @@ interface ProfileFormProps {
   email: string;
 }
 
+interface Profile {
+  id: string;
+  email: string;
+  full_name: string | null;
+  birth_date: string | null;
+  birth_time: string | null;
+  birth_place: string | null;
+  birth_coordinates: string | null;
+  updated_at: string;
+}
+
 export function ProfileForm({ userId, email }: ProfileFormProps) {
   const router = useRouter();
   const [fullName, setFullName] = useState('');
@@ -25,13 +36,13 @@ export function ProfileForm({ userId, email }: ProfileFormProps) {
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(true);
-  const [existingProfile, setExistingProfile] = useState<any>(null);
+  const [existingProfile, setExistingProfile] = useState<Profile | null>(null);
 
   // Load existing profile data
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const { data: profile, error } = await supabase
+        const { data: profile } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', userId)
@@ -45,7 +56,7 @@ export function ProfileForm({ userId, email }: ProfileFormProps) {
           setBirthPlace(profile.birth_place || '');
           setIsEditing(false);
         }
-      } catch (err) {
+      } catch {
         console.log('No existing profile found');
       }
     };
