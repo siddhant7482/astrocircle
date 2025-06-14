@@ -179,7 +179,7 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Calendar className="h-5 w-5 text-blue-300" />
-              Today's Cosmic Energy
+              Today&apos;s Cosmic Energy
             </CardTitle>
             <CardDescription className="text-gray-300">
               Current planetary influences
