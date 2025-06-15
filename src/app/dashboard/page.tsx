@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useUser } from '@/lib/hooks/use-user'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, Plus, Star, Calendar, User, Sun, Moon, Sparkles } from 'lucide-react'
+import { Loader2, Plus, Star, User, Sun, Moon, Sparkles } from 'lucide-react'
 import { getUserProfile, UserProfile } from '@/lib/supabase/queries'
 
 interface DailyHoroscope {
@@ -401,21 +401,34 @@ export default function Dashboard() {
               Quick Actions
             </CardTitle>
             <CardDescription className="text-gray-300">
-              Get started with your astrological journey
+              Explore your cosmic insights instantly
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start bg-gradient-to-r from-purple-600/80 to-blue-600/80 hover:from-purple-700 hover:to-blue-700 text-white border-none backdrop-blur-sm">
+            <Button 
+              className="w-full justify-start bg-gradient-to-r from-purple-600/80 to-blue-600/80 hover:from-purple-700 hover:to-blue-700 text-white border-none backdrop-blur-sm"
+              onClick={() => router.push('/astro-report')}
+            >
               <Star className="mr-2 h-4 w-4" />
-              Generate Astro Report
+              Complete Astro Report
             </Button>
-            <Button className="w-full justify-start bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/30 backdrop-blur-sm">
-              <Calendar className="mr-2 h-4 w-4" />
-              Daily Horoscope
+            <Button 
+              className="w-full justify-start bg-gradient-to-r from-green-600/80 to-blue-600/80 hover:from-green-700 hover:to-blue-700 text-white border-none backdrop-blur-sm"
+              onClick={() => router.push('/career')}
+            >
+              💼 Career Analysis
             </Button>
-            <Button className="w-full justify-start bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/30 backdrop-blur-sm">
-              <User className="mr-2 h-4 w-4" />
-              Update Profile
+            <Button 
+              className="w-full justify-start bg-gradient-to-r from-pink-600/80 to-purple-600/80 hover:from-pink-700 hover:to-purple-700 text-white border-none backdrop-blur-sm"
+              onClick={() => router.push('/relationships')}
+            >
+              💕 Love & Marriage
+            </Button>
+            <Button 
+              className="w-full justify-start bg-gradient-to-r from-emerald-600/80 to-green-600/80 hover:from-emerald-700 hover:to-green-700 text-white border-none backdrop-blur-sm"
+              onClick={() => router.push('/health')}
+            >
+              🌿 Health Analysis
             </Button>
           </CardContent>
         </AnimatedCard>
@@ -423,19 +436,42 @@ export default function Dashboard() {
         {/* Recent Activity */}
         <AnimatedCard delay={100}>
           <CardHeader>
-            <CardTitle className="text-white">Recent Activity</CardTitle>
+            <CardTitle className="text-white">Cosmic Insights</CardTitle>
             <CardDescription className="text-gray-300">
-              Your latest astrological insights
+              Your astrological journey at a glance
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-8">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 flex items-center justify-center backdrop-blur-sm">
-                <Star className="h-8 w-8 text-purple-300" />
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                  <Star className="h-4 w-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white text-sm font-medium">Birth Chart Available</p>
+                  <p className="text-gray-400 text-xs">Your cosmic blueprint is ready</p>
+                </div>
               </div>
-              <p className="text-gray-300">
-                No recent activity yet. Start by generating your first astro report!
-              </p>
+              
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 flex items-center justify-center">
+                  <Sun className="h-4 w-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white text-sm font-medium">Daily Guidance</p>
+                  <p className="text-gray-400 text-xs">Fresh horoscope every day</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center">
+                  <Sparkles className="h-4 w-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white text-sm font-medium">Life Analysis</p>
+                  <p className="text-gray-400 text-xs">Career, Love, Health insights</p>
+                </div>
+              </div>
             </div>
           </CardContent>
         </AnimatedCard>
@@ -443,9 +479,9 @@ export default function Dashboard() {
         {/* Profile Summary */}
         <AnimatedCard delay={200}>
           <CardHeader>
-            <CardTitle className="text-white">Profile Summary</CardTitle>
+            <CardTitle className="text-white">Astrological Profile</CardTitle>
             <CardDescription className="text-gray-300">
-              Your astrological profile information
+              Your cosmic identity and birth chart status
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -456,18 +492,60 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <p className="text-sm text-white font-medium">
-                    {user.email}
+                    {profileData?.full_name || user.email}
                   </p>
                   <p className="text-xs text-gray-400">
-                    Astrology Enthusiast
+                    {profileData?.birth_date ? 'Chart Generated' : 'Seeker of Cosmic Wisdom'}
                   </p>
                 </div>
               </div>
-              <div className="p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 backdrop-blur-sm">
-                <p className="text-sm text-gray-300">
-                  Complete your profile to unlock personalized insights and detailed astro report analysis
-                </p>
-              </div>
+              
+              {profileData?.birth_date && profileData?.birth_time && profileData?.birth_place ? (
+                <div className="space-y-3">
+                  <div className="p-3 rounded-lg bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <span className="text-green-200 text-xs font-medium">Profile Complete</span>
+                    </div>
+                    <p className="text-gray-300 text-xs">
+                      📅 Born: {new Date(profileData.birth_date).toLocaleDateString()}<br/>
+                      🕐 Time: {profileData.birth_time}<br/>
+                      📍 Place: {profileData.birth_place}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="p-2 rounded bg-white/5">
+                      <div className="text-purple-300 text-xs font-medium">Sun Sign</div>
+                      <div className="text-white text-sm">♌</div>
+                    </div>
+                    <div className="p-2 rounded bg-white/5">
+                      <div className="text-blue-300 text-xs font-medium">Moon Sign</div>
+                      <div className="text-white text-sm">♋</div>
+                    </div>
+                    <div className="p-2 rounded bg-white/5">
+                      <div className="text-green-300 text-xs font-medium">Rising</div>
+                      <div className="text-white text-sm">♐</div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3 rounded-lg bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                    <span className="text-orange-200 text-xs font-medium">Complete Your Profile</span>
+                  </div>
+                  <p className="text-gray-300 text-xs mb-3">
+                    Add your birth details to unlock personalized cosmic insights and detailed astrological analysis
+                  </p>
+                  <Button 
+                    size="sm"
+                    className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
+                    onClick={() => router.push('/profile')}
+                  >
+                    Complete Profile
+                  </Button>
+                </div>
+              )}
             </div>
           </CardContent>
         </AnimatedCard>
@@ -554,26 +632,52 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Star className="h-5 w-5 text-yellow-300" />
-              Astrological Tools
+              Life Analysis Tools
             </CardTitle>
             <CardDescription className="text-gray-300">
-              Explore your cosmic connections
+              Deep insights into every aspect of your life
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/30 backdrop-blur-sm">
-                Tarot
+              <Button 
+                variant="outline" 
+                className="bg-gradient-to-r from-green-500/20 to-blue-500/20 hover:from-green-500/30 hover:to-blue-500/30 text-white border-green-500/30 hover:border-green-500/50 backdrop-blur-sm"
+                onClick={() => router.push('/career')}
+              >
+                💼 Career
               </Button>
-              <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/30 backdrop-blur-sm">
-                Numerology
+              <Button 
+                variant="outline" 
+                className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 text-white border-pink-500/30 hover:border-pink-500/50 backdrop-blur-sm"
+                onClick={() => router.push('/relationships')}
+              >
+                💕 Love
               </Button>
-              <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/30 backdrop-blur-sm">
-                Compatibility
+              <Button 
+                variant="outline" 
+                className="bg-gradient-to-r from-emerald-500/20 to-green-500/20 hover:from-emerald-500/30 hover:to-green-500/30 text-white border-emerald-500/30 hover:border-emerald-500/50 backdrop-blur-sm"
+                onClick={() => router.push('/health')}
+              >
+                🌿 Health
               </Button>
-              <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/30 backdrop-blur-sm">
-                Transits
+              <Button 
+                variant="outline" 
+                className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 hover:from-purple-500/30 hover:to-blue-500/30 text-white border-purple-500/30 hover:border-purple-500/50 backdrop-blur-sm"
+                onClick={() => router.push('/astro-report')}
+              >
+                ⭐ Full Report
               </Button>
+            </div>
+            
+            <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20">
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="h-4 w-4 text-yellow-300" />
+                <span className="text-yellow-200 text-xs font-medium">AI-Powered Analysis</span>
+              </div>
+              <p className="text-gray-300 text-xs">
+                Each tool uses advanced Vedic astrology combined with AI to provide personalized insights based on your birth chart
+              </p>
             </div>
           </CardContent>
         </AnimatedCard>
