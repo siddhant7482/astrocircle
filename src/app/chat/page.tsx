@@ -6,25 +6,25 @@ import { Sparkles, MessageCircle, Star, Zap } from 'lucide-react'
 
 export default function ChatPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-2 md:p-4">
+      <div className="max-w-6xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center gap-3">
             <div className="p-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600">
               <MessageCircle className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-white">
+            <h1 className="text-2xl md:text-4xl font-bold text-white">
               Vedic Astrology Chat
             </h1>
           </div>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto px-4">
             Get personalized insights from our AI astrologer trained in traditional Vedic astrology principles
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8 px-4 md:px-0">
           <Card className="backdrop-blur-md bg-white/10 border-white/20">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-white text-lg">
@@ -69,7 +69,7 @@ export default function ChatPage() {
         </div>
 
         {/* Chat Interface */}
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full px-4 md:px-0">
           <ChatInterface />
         </div>
 
