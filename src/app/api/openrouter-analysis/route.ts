@@ -5,6 +5,43 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || 'sk-or-v1-2917c907f
 export async function POST(request: NextRequest) {
   try {
     const { prompt } = await request.json()
+    
+    // Detect if this is a career analysis request
+    const isCareerAnalysis = prompt.toLowerCase().includes('career prospects') || 
+                           prompt.toLowerCase().includes('suitable career') ||
+                           prompt.toLowerCase().includes('career')
+
+    const systemPrompt = isCareerAnalysis ? 
+      `You are an expert in Hindu Vedic Astrology specializing in career guidance. You have deep knowledge of:
+      - How planetary positions influence career choices
+      - Traditional Hindu astrology career recommendations
+      - Vedic remedies for career success
+      - Professional timing and opportunities through astrology
+      
+      For career analysis, structure your response as a JSON object with:
+      - suitableCareers: Array of 5-6 specific career paths based on planetary positions
+      - explanation: Detailed explanation of career patterns and planetary influences
+      - remedies: Array of specific Vedic remedies for career success
+      
+      Provide authentic Hindu astrology career insights based on birth data.`
+      :
+      `You are an expert in Hindu Vedic Astrology with deep knowledge of traditional Indian astrological principles. You specialize in:
+      - Birth chart analysis using Hindu astrology methods
+      - Planetary positions and their meanings in Hindu tradition
+      - Vedic remedies and traditional solutions
+      - Understanding of houses, signs, dashas, yogas, and nakshatras
+      - Traditional Hindu astrological texts and principles
+      
+      Always provide authentic Hindu astrology insights based on traditional knowledge. 
+      
+      Structure your response as a JSON object with these sections:
+      - chartAnalysis: Overall chart interpretation (string)
+      - detailedAnalysis: Detailed planetary analysis (string)  
+      - yogas: Array of important yogas/combinations (array of strings)
+      - dashaAnalysis: Current dasha period analysis (string)
+      - remedies: Traditional remedies (array of strings)
+      
+      Format each yoga as "Yoga Name - Description" for proper parsing.`
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -19,23 +56,7 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: 'system',
-            content: `You are an expert in Hindu Vedic Astrology with deep knowledge of traditional Indian astrological principles. You specialize in:
-            - Birth chart analysis using Hindu astrology methods
-            - Planetary positions and their meanings in Hindu tradition
-            - Vedic remedies and traditional solutions
-            - Understanding of houses, signs, dashas, yogas, and nakshatras
-            - Traditional Hindu astrological texts and principles
-            
-            Always provide authentic Hindu astrology insights based on traditional knowledge. 
-            
-            Structure your response as a JSON object with these sections:
-            - chartAnalysis: Overall chart interpretation (string)
-            - detailedAnalysis: Detailed planetary analysis (string)  
-            - yogas: Array of important yogas/combinations (array of strings)
-            - dashaAnalysis: Current dasha period analysis (string)
-            - remedies: Traditional remedies (array of strings)
-            
-            Format each yoga as "Yoga Name - Description" for proper parsing.`
+            content: systemPrompt
           },
           {
             role: 'user',
