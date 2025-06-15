@@ -134,6 +134,17 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
                   Astro Report
                 </a>
                 <a 
+                  href="/career" 
+                  className={`flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
+                    pathname === '/career' 
+                      ? 'text-white bg-white/20 shadow-lg shadow-purple-500/20 border border-white/30' 
+                      : 'text-gray-200 hover:text-white hover:bg-white/15 hover:shadow-md hover:shadow-blue-500/10'
+                  }`}
+                >
+                  <span className="mr-3">💼</span>
+                  Career
+                </a>
+                <a 
                   href="/relationships" 
                   className={`flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
                     pathname === '/relationships' 
@@ -225,6 +236,18 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
                     >
                       <span className="mr-3">⭐</span>
                       Astro Report
+                    </a>
+                    <a 
+                      href="/career" 
+                      className={`flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
+                        pathname === '/career' 
+                          ? 'text-white bg-white/20 shadow-lg shadow-purple-500/20 border border-white/30' 
+                          : 'text-gray-200 hover:text-white hover:bg-white/15 hover:shadow-md hover:shadow-blue-500/10'
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <span className="mr-3">💼</span>
+                      Career
                     </a>
                     <a 
                       href="/relationships" 
