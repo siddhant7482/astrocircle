@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         { name: 'Ketu', period: 6793, base: 0 }   // South Node (opposite to Rahu)
       ]
       
-      return planets.map((planet, index) => {
+      return planets.map((planet) => {
         // Calculate approximate position based on orbital periods
         const daysSinceEpoch = jdn - 2451545 // J2000.0 epoch
         const meanLongitude = (planet.base + (360 * daysSinceEpoch / planet.period) + (hour * 15) + (locationHash % 360)) % 360

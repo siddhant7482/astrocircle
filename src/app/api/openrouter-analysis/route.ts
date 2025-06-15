@@ -4,7 +4,7 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || 'sk-or-v1-2917c907f
 
 export async function POST(request: NextRequest) {
   try {
-    const { prompt, userInfo, planetPositions } = await request.json()
+    const { prompt } = await request.json()
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -59,7 +59,14 @@ export async function POST(request: NextRequest) {
       throw new Error('No content received from OpenRouter API')
     }
 
-    let analysisData: any
+    let analysisData: {
+      chartAnalysis?: string;
+      detailedAnalysis?: string;
+      yogas?: string[];
+      dashaAnalysis?: string;
+      remedies?: string[];
+              [key: string]: unknown;
+    }
     try {
       // Remove any markdown code blocks before parsing
       const cleanContent = content

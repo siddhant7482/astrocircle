@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, Star, User, Calendar, Clock, MapPin, FileText, Sparkles } from 'lucide-react'
+import { Loader2, Star, User, Clock, FileText, Sparkles } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getUserProfile, UserProfile } from '@/lib/supabase/queries'
 
@@ -229,14 +229,14 @@ export default function AstroReport() {
         if (typeof rawResponse === 'string') {
           try {
             cleanContent = JSON.parse(rawResponse)
-          } catch (e) {
+          } catch {
             // If parsing fails, treat as plain text
             cleanContent = { detailedAnalysis: rawResponse }
           }
         }
         
         // Clean up any markdown/JSON formatting from the content
-        const cleanText = (text: any): string => {
+        const cleanText = (text: unknown): string => {
           if (typeof text !== 'string') return String(text || '')
           return text
             .replace(/```json/g, '')
@@ -245,7 +245,7 @@ export default function AstroReport() {
               try {
                 const parsed = JSON.parse(match)
                 return Object.values(parsed).join('\n\n')
-              } catch (e) {
+              } catch {
                 return match
               }
             })
