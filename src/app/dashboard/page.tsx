@@ -5,12 +5,25 @@ import { useRouter } from 'next/navigation'
 import { useUser } from '@/lib/hooks/use-user'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, Plus, Star, Calendar, User } from 'lucide-react'
+import { Loader2, Plus, Star, Calendar, User, Sun, Moon, Sparkles } from 'lucide-react'
+import { getUserProfile, UserProfile } from '@/lib/supabase/queries'
+
+interface DailyHoroscope {
+  date: string
+  prediction: string
+  luckyNumber: number
+  luckyColor: string
+  advice: string
+  planetaryInfluence: string
+}
 
 export default function Dashboard() {
   const { user, loading } = useUser()
   const router = useRouter()
   const [isRedirecting, setIsRedirecting] = useState(false)
+  const [profileData, setProfileData] = useState<UserProfile | null>(null)
+  const [dailyHoroscope, setDailyHoroscope] = useState<DailyHoroscope | null>(null)
+  const [isGeneratingHoroscope, setIsGeneratingHoroscope] = useState(false)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -18,6 +31,127 @@ export default function Dashboard() {
       router.push('/login')
     }
   }, [user, loading, router])
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user && user.id) {
+        try {
+          const profile = await getUserProfile(user.id)
+          setProfileData(profile)
+          
+          // Generate horoscope if profile is complete
+          if (profile && profile.full_name && profile.birth_date && profile.birth_time && profile.birth_place) {
+            setTimeout(() => {
+              generateDailyHoroscope(profile)
+            }, 1000)
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error)
+        }
+      }
+    }
+
+    fetchUserProfile()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
+
+  const generateDailyHoroscope = async (profile?: UserProfile) => {
+    const userProfile = profile || profileData
+    if (!userProfile || !userProfile.full_name || !userProfile.birth_date) return
+
+    setIsGeneratingHoroscope(true)
+    try {
+      const today = new Date()
+      const dateString = today.toISOString().split('T')[0]
+      
+      // Check if we already have today's horoscope
+      const existingHoroscope = localStorage.getItem(`horoscope_${dateString}_${userProfile.id}`)
+      if (existingHoroscope) {
+        setDailyHoroscope(JSON.parse(existingHoroscope))
+        setIsGeneratingHoroscope(false)
+        return
+      }
+
+      // Call DeepSeek AI for daily horoscope
+      const horoscopePrompt = `Based on Hindu Vedic Astrology, generate today's horoscope for:
+      Name: ${userProfile.full_name}
+      Birth Date: ${userProfile.birth_date}
+      Birth Time: ${userProfile.birth_time}
+      Birth Place: ${userProfile.birth_place}
+      Current Date: ${today.toDateString()}
+      
+      Please provide a JSON response with:
+      {
+        "prediction": "detailed daily prediction based on current planetary transits and birth chart",
+        "luckyNumber": [number between 1-9],
+        "luckyColor": "auspicious color for today",
+        "advice": "specific actionable advice for the day",
+        "planetaryInfluence": "dominant planetary influence affecting today"
+      }
+      
+      Focus on traditional Hindu astrology with current planetary positions and their effects on the individual's birth chart.`
+
+      const fallbackHoroscope = {
+        date: dateString,
+        prediction: "Today brings opportunities for growth and positive transformation. The cosmic energies favor those who approach challenges with wisdom and patience.",
+        luckyNumber: Math.floor(Math.random() * 9) + 1,
+        luckyColor: ["Gold", "Blue", "Green", "Red", "Yellow"][Math.floor(Math.random() * 5)],
+        advice: "Focus on your goals with determination. Trust your intuition and maintain harmony in relationships.",
+        planetaryInfluence: "Jupiter's blessing brings wisdom and good fortune to your endeavors today."
+      }
+
+      const horoscopeData = { ...fallbackHoroscope }
+
+      // Call OpenRouter API with DeepSeek
+      try {
+        const response = await fetch('/api/openrouter-analysis', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prompt: horoscopePrompt
+          }),
+        })
+
+        if (response.ok) {
+          const apiResponse = await response.json()
+          
+          if (apiResponse.prediction && typeof apiResponse.prediction === 'string') {
+            horoscopeData.prediction = apiResponse.prediction
+            console.log('✅ Using AI daily prediction')
+          }
+          
+          if (apiResponse.luckyNumber && typeof apiResponse.luckyNumber === 'number') {
+            horoscopeData.luckyNumber = apiResponse.luckyNumber
+          }
+          
+          if (apiResponse.luckyColor && typeof apiResponse.luckyColor === 'string') {
+            horoscopeData.luckyColor = apiResponse.luckyColor
+          }
+          
+          if (apiResponse.advice && typeof apiResponse.advice === 'string') {
+            horoscopeData.advice = apiResponse.advice
+          }
+          
+          if (apiResponse.planetaryInfluence && typeof apiResponse.planetaryInfluence === 'string') {
+            horoscopeData.planetaryInfluence = apiResponse.planetaryInfluence
+          }
+        }
+      } catch {
+        console.log('API call failed, using fallback horoscope')
+      }
+
+      // Store in localStorage for today
+      localStorage.setItem(`horoscope_${dateString}_${userProfile.id}`, JSON.stringify(horoscopeData))
+      setDailyHoroscope(horoscopeData)
+
+    } catch (error) {
+      console.error('Error generating horoscope:', error)
+    } finally {
+      setIsGeneratingHoroscope(false)
+    }
+  }
 
   if (loading || isRedirecting) {
     return (
@@ -344,27 +478,75 @@ export default function Dashboard() {
         <AnimatedCard delay={300}>
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-blue-300" />
-              Today&apos;s Cosmic Energy
+              <Sun className="h-5 w-5 text-orange-300" />
+              Daily Horoscope
             </CardTitle>
             <CardDescription className="text-gray-300">
-              Current planetary influences
+              Your personalized Vedic astrology guidance for today
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Moon Phase</span>
-                <span className="text-white font-medium">Waxing Crescent</span>
+            {isGeneratingHoroscope ? (
+              <div className="text-center py-4">
+                <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-orange-300" />
+                <p className="text-gray-300 text-sm">Consulting the stars...</p>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Dominant Element</span>
-                <span className="text-purple-300 font-medium">Water</span>
+            ) : dailyHoroscope ? (
+              <div className="space-y-4">
+                <div className="p-3 rounded-lg bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20">
+                  <p className="text-gray-200 text-sm leading-relaxed">{dailyHoroscope.prediction}</p>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="text-center p-2 rounded-lg bg-white/5">
+                    <div className="text-orange-300 font-semibold text-lg">{dailyHoroscope.luckyNumber}</div>
+                    <div className="text-gray-400 text-xs">Lucky Number</div>
+                  </div>
+                  <div className="text-center p-2 rounded-lg bg-white/5">
+                    <div className="text-orange-300 font-semibold text-sm">{dailyHoroscope.luckyColor}</div>
+                    <div className="text-gray-400 text-xs">Lucky Color</div>
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20">
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-blue-300 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-blue-200 text-xs font-medium mb-1">Today&apos;s Advice</p>
+                      <p className="text-gray-300 text-xs">{dailyHoroscope.advice}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Moon className="h-3 w-3" />
+                  <span>{dailyHoroscope.planetaryInfluence}</span>
+                </div>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-2">
-                <div className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full w-3/4"></div>
+            ) : profileData && profileData.full_name && profileData.birth_date ? (
+              <div className="text-center py-4">
+                <Button 
+                  onClick={() => generateDailyHoroscope()}
+                  className="bg-gradient-to-r from-orange-600 to-yellow-600 hover:from-orange-700 hover:to-yellow-700"
+                >
+                  <Sun className="mr-2 h-4 w-4" />
+                  Get Today&apos;s Horoscope
+                </Button>
               </div>
-            </div>
+            ) : (
+              <div className="text-center py-4">
+                <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r from-orange-500/20 to-yellow-500/20 flex items-center justify-center">
+                  <Sun className="h-6 w-6 text-orange-300" />
+                </div>
+                <p className="text-gray-300 text-sm">Complete your profile to get personalized daily horoscope</p>
+                <Button 
+                  className="mt-3 bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  onClick={() => router.push('/profile')}
+                >
+                  Complete Profile
+                </Button>
+              </div>
+            )}
           </CardContent>
         </AnimatedCard>
 
