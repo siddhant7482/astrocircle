@@ -273,7 +273,7 @@ export default function Dashboard() {
           <CardContent className="space-y-3">
             <Button className="w-full justify-start bg-gradient-to-r from-purple-600/80 to-blue-600/80 hover:from-purple-700 hover:to-blue-700 text-white border-none backdrop-blur-sm">
               <Star className="mr-2 h-4 w-4" />
-              Generate Birth Chart
+              Generate Astro Report
             </Button>
             <Button className="w-full justify-start bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/30 backdrop-blur-sm">
               <Calendar className="mr-2 h-4 w-4" />
@@ -300,7 +300,7 @@ export default function Dashboard() {
                 <Star className="h-8 w-8 text-purple-300" />
               </div>
               <p className="text-gray-300">
-                No recent activity yet. Start by generating your first birth chart!
+                No recent activity yet. Start by generating your first astro report!
               </p>
             </div>
           </CardContent>
@@ -331,7 +331,7 @@ export default function Dashboard() {
               </div>
               <div className="p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 backdrop-blur-sm">
                 <p className="text-sm text-gray-300">
-                  Complete your profile to unlock personalized insights and detailed birth chart analysis
+                  Complete your profile to unlock personalized insights and detailed astro report analysis
                 </p>
               </div>
             </div>

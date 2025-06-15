@@ -18,9 +18,9 @@ const MainNav = () => {
       color: "text-sky-500",
     },
     {
-      label: "Reports",
+      label: "Astro Report",
       icon: FileText,
-      href: "/reports",
+      href: "/astro-report",
       color: "text-violet-500",
     },
   ];
