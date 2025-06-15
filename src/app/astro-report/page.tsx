@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, Star, User, Clock, FileText, Sparkles } from 'lucide-react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+
 import { getUserProfile, UserProfile } from '@/lib/supabase/queries'
 
 interface UserInfo {
@@ -139,50 +139,103 @@ export default function AstroReport() {
   const generateAstroChart = async () => {
     setIsGenerating(true)
     try {
-      console.log('Generating chart for:', userInfo)
+      console.log('Generating AI-powered Vedic chart for:', userInfo)
       
-      // First try to get calculated positions from API
-      let dynamicPlanetPositions: PlanetPosition[]
+      // Use DeepSeek AI to generate planetary positions and analysis
+      const chartPrompt = `Based on Hindu Vedic Astrology, calculate the planetary positions and generate a birth chart for:
+      Name: ${userInfo.name}
+      Birth Date: ${userInfo.dateOfBirth}
+      Birth Time: ${userInfo.timeOfBirth}
+      Birth Place: ${userInfo.placeOfBirth}
       
+      Please provide a JSON response with:
+      {
+        "planetPositions": [
+          {
+            "planet": "Sun (Surya)",
+            "house": [house number 1-12],
+            "sign": "[Sign Name] ([Sanskrit Name])",
+            "degree": "[degree]°[minutes]'"
+          }
+          // ... for all 9 planets: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu
+        ],
+        "chartAnalysis": "detailed analysis of the birth chart based on planetary positions and houses",
+        "yogas": ["array of yogas/combinations formed in the chart"],
+        "dashaAnalysis": "current planetary time period analysis"
+      }
+      
+      Focus on traditional Hindu Vedic astrology with accurate planetary positions, house placements, and Sanskrit terminology.`
+
+      // Show loading state with AI-generated positions
+      setReportData({
+        chartAnalysis: 'DeepSeek AI is calculating your planetary positions...',
+        planetPositions: [],
+        detailedAnalysis: 'Analyzing your birth chart with AI...',
+        remedies: ['Loading Vedic remedies...']
+      })
+
+      setCurrentStep(2)
+
+      // Fallback positions while AI is processing
+      const fallbackPositions = generatePlanetaryPositions(
+        userInfo.dateOfBirth,
+        userInfo.timeOfBirth,
+        userInfo.placeOfBirth
+      )
+
       try {
-        const positionResponse = await fetch('/api/calculate-positions', {
+        // Call DeepSeek AI for complete chart analysis
+        const response = await fetch('/api/openrouter-analysis', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            birthDate: userInfo.dateOfBirth,
-            birthTime: userInfo.timeOfBirth,
-            birthPlace: userInfo.placeOfBirth
+            prompt: chartPrompt
           }),
         })
-        
-        if (positionResponse.ok) {
-          const positionData = await positionResponse.json()
-          dynamicPlanetPositions = positionData.positions
-          console.log('API calculated positions:', dynamicPlanetPositions)
+
+        if (response.ok) {
+          const aiResponse = await response.json()
+          console.log('🤖 DeepSeek AI Chart Response:', aiResponse)
+          
+          // Use AI-generated planetary positions if available
+          let finalPositions = fallbackPositions
+          if (aiResponse.planetPositions && Array.isArray(aiResponse.planetPositions) && aiResponse.planetPositions.length > 0) {
+            finalPositions = aiResponse.planetPositions
+            console.log('✅ Using DeepSeek AI planetary positions')
+          } else {
+            console.log('⚠️ AI positions not available, using calculated positions')
+          }
+
+          // Update with AI analysis
+          setReportData({
+            chartAnalysis: aiResponse.chartAnalysis || 'Your birth chart reveals significant planetary influences that shape your life path and personality. The positioning of planets in various houses indicates your strengths, challenges, and opportunities for growth.',
+            planetPositions: finalPositions,
+            detailedAnalysis: 'Loading detailed analysis...',
+            remedies: ['Loading remedies...'],
+            yogas: aiResponse.yogas || [],
+            dashaAnalysis: aiResponse.dashaAnalysis || ''
+          })
+
+          // Generate detailed analysis with the final positions
+          await generateDetailedAnalysis(finalPositions)
         } else {
-          throw new Error('API calculation failed')
+          throw new Error('AI analysis failed')
         }
-      } catch (apiError) {
-        console.log('API failed, using fallback calculation:', apiError)
-        // Fallback to client-side calculation
-        dynamicPlanetPositions = generatePlanetaryPositions(
-          userInfo.dateOfBirth,
-          userInfo.timeOfBirth,
-          userInfo.placeOfBirth
-        )
+      } catch (aiError) {
+        console.log('🔄 AI call failed, using fallback data:', aiError)
+        
+        // Use fallback positions and continue with detailed analysis
+        setReportData({
+          chartAnalysis: 'Your birth chart reveals significant planetary influences that shape your life path. The positioning of celestial bodies at your birth time creates a unique cosmic fingerprint.',
+          planetPositions: fallbackPositions,
+          detailedAnalysis: 'Loading detailed analysis...',
+          remedies: ['Loading remedies...']
+        })
+
+        await generateDetailedAnalysis(fallbackPositions)
       }
-
-      setReportData({
-        chartAnalysis: 'Loading detailed Hindu astrology analysis...',
-        planetPositions: dynamicPlanetPositions,
-        detailedAnalysis: 'Loading detailed analysis...',
-        remedies: ['Loading remedies...']
-      })
-
-      setCurrentStep(2)
-      await generateDetailedAnalysis(dynamicPlanetPositions)
     } catch (error) {
       console.error('Error generating astro chart:', error)
     } finally {
@@ -441,11 +494,13 @@ export default function AstroReport() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="aspect-square w-full max-w-lg mx-auto">
-                <div className="relative border-2 border-white/20 rounded-lg bg-gradient-to-br from-purple-900/20 to-blue-900/20 backdrop-blur-sm">
-                  {/* Diamond shape chart - Traditional Hindu/Vedic layout */}
-                  <div className="grid grid-cols-4 grid-rows-4 h-96 gap-1 p-2">
+              <div className="w-full max-w-2xl mx-auto">
+                {/* Traditional North Indian Vedic Chart */}
+                <div className="relative aspect-square border-2 border-white/30 rounded-lg bg-gradient-to-br from-purple-900/20 to-blue-900/20 backdrop-blur-sm overflow-hidden [&_*]:scrollbar-none [&_*::-webkit-scrollbar]:hidden">
+                  {/* Chart Grid - North Indian Style */}
+                  <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 p-1 gap-0.5">
                     {Array.from({ length: 16 }, (_, index) => {
+                      // North Indian chart house layout
                       const houseNumbers = [12, 1, 2, 3, 11, '', '', 4, 10, '', '', 5, 9, 8, 7, 6]
                       const house = houseNumbers[index]
                       const isEmpty = house === ''
@@ -453,34 +508,49 @@ export default function AstroReport() {
                       return (
                         <div
                           key={index}
-                          className={`border rounded-lg p-2 text-xs flex flex-col items-center justify-center transition-all duration-300 ${
+                          className={`relative border transition-all duration-300 ${
                             isEmpty 
-                              ? 'border-transparent bg-transparent' 
-                              : 'bg-white/10 border-white/30 hover:bg-white/20 hover:border-purple-300/50'
+                              ? 'border-transparent bg-transparent'
+                              : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-purple-300/50'
                           }`}
                         >
                           {house && (
                             <>
-                              <div className="font-bold text-purple-200 text-sm mb-1">
+                              {/* House Number */}
+                              <div className="absolute top-1 left-1 text-purple-200 font-bold text-xs bg-black/30 rounded px-1">
                                 {house}
                               </div>
-                              <div className="text-gray-300 text-xs text-center min-h-[40px] flex flex-col justify-center">
-                                {reportData?.planetPositions
-                                  .filter(p => p.house === Number(house))
-                                  .map((p, idx) => (
-                                    <div key={idx} className="mb-1">
-                                      <span className="text-yellow-300 font-medium">
-                                        {p.planet.includes('(') ? p.planet.split(' ')[0] : p.planet}
-                                      </span>
-                                      <br />
-                                      <span className="text-xs text-gray-400">
-                                        {p.sign.split(' ')[0]}
-                                      </span>
-                                    </div>
-                                  ))}
-                                {reportData?.planetPositions.filter(p => p.house === Number(house)).length === 0 && 
-                                  <span className="text-gray-500 text-xs">Empty</span>
-                                }
+                              
+                              {/* Planets in House */}
+                              <div className="p-1 pt-5 h-full flex flex-col justify-center items-center">
+                                <div className="space-y-0.5 text-center">
+                                  {reportData?.planetPositions
+                                    .filter(p => p.house === Number(house))
+                                    .slice(0, 3) // Limit to 3 planets per house to avoid overflow
+                                    .map((p, idx) => {
+                                      // Get short planet name
+                                      const planetShort = p.planet.includes('(') 
+                                        ? p.planet.split(' ')[0] 
+                                        : p.planet.replace('Venus', 'Ve').replace('Jupiter', 'Ju').replace('Mercury', 'Me').replace('Saturn', 'Sa')
+                                      
+                                      return (
+                                        <div key={idx} className="text-center">
+                                          <div className="text-yellow-300 font-medium text-xs leading-none">
+                                            {planetShort}
+                                          </div>
+                                          <div className="text-gray-400 text-xs leading-none">
+                                            {p.sign.split(' ')[0].substring(0, 3)}
+                                          </div>
+                                        </div>
+                                      )
+                                    })}
+                                  {reportData?.planetPositions.filter(p => p.house === Number(house)).length === 0 && 
+                                    <div className="text-gray-500 text-xs opacity-50">Empty</div>
+                                  }
+                                  {reportData && reportData.planetPositions.filter(p => p.house === Number(house)).length > 3 && 
+                                    <div className="text-blue-300 text-xs">+{reportData.planetPositions.filter(p => p.house === Number(house)).length - 3}</div>
+                                  }
+                                </div>
                               </div>
                             </>
                           )}
@@ -489,39 +559,67 @@ export default function AstroReport() {
                     })}
                   </div>
                   
-                  {/* Center label */}
+                  {/* Center Chart Label */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-                      Rashi Chart
+                    <div className="bg-gradient-to-r from-purple-600/90 to-blue-600/90 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm border border-white/20">
+                      🏛️ Rashi Chart
                     </div>
                   </div>
                 </div>
                 
-                {/* Chart legend */}
-                <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-                  <div className="text-center">
-                    <div className="text-yellow-300 font-medium">Planets</div>
-                    <div className="text-gray-400">Current Positions</div>
+                {/* Chart Legend */}
+                <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-yellow-300 font-medium mb-1">🪐 Planets</div>
+                    <div className="text-gray-400 text-xs">Cosmic Bodies</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-purple-300 font-medium">Houses</div>
-                    <div className="text-gray-400">Life Areas</div>
+                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-purple-300 font-medium mb-1">🏠 Houses</div>
+                    <div className="text-gray-400 text-xs">Life Areas</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-blue-300 font-medium">Signs</div>
-                    <div className="text-gray-400">Zodiac Influence</div>
+                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-blue-300 font-medium mb-1">♈ Signs</div>
+                    <div className="text-gray-400 text-xs">Zodiac Energy</div>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-green-300 font-medium mb-1">📐 Degrees</div>
+                    <div className="text-gray-400 text-xs">Exact Position</div>
                   </div>
                 </div>
+                
+                {/* Quick House Meanings */}
+                <div className="mt-6 grid grid-cols-3 md:grid-cols-4 gap-2 text-xs">
+                  {[
+                    {num: 1, name: "Self", color: "text-red-300"},
+                    {num: 2, name: "Wealth", color: "text-orange-300"},
+                    {num: 3, name: "Siblings", color: "text-yellow-300"},
+                    {num: 4, name: "Home", color: "text-green-300"},
+                    {num: 5, name: "Children", color: "text-blue-300"},
+                    {num: 6, name: "Health", color: "text-indigo-300"},
+                    {num: 7, name: "Marriage", color: "text-purple-300"},
+                    {num: 8, name: "Secrets", color: "text-pink-300"},
+                    {num: 9, name: "Fortune", color: "text-teal-300"},
+                    {num: 10, name: "Career", color: "text-cyan-300"},
+                    {num: 11, name: "Gains", color: "text-lime-300"},
+                    {num: 12, name: "Loss", color: "text-amber-300"}
+                  ].map(house => (
+                    <div key={house.num} className="text-center p-1 rounded bg-white/5">
+                      <div className={`font-medium ${house.color}`}>{house.num}</div>
+                      <div className="text-gray-400">{house.name}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-                             <div className="mt-4 p-6 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 min-h-[150px]">
-                 <div className="text-gray-300 leading-relaxed space-y-3">
-                   {reportData?.chartAnalysis.split('\n\n').map((paragraph, index) => (
-                     <p key={index} className="text-sm md:text-base">
-                       {paragraph.trim()}
-                     </p>
-                   ))}
-                 </div>
-               </div>
+
+              <div className="mt-4 p-6 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 min-h-[150px]">
+                <div className="text-gray-300 leading-relaxed space-y-3">
+                  {reportData?.chartAnalysis.split('\n\n').map((paragraph, index) => (
+                    <p key={index} className="text-sm md:text-base">
+                      {paragraph.trim()}
+                    </p>
+                  ))}
+                </div>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -539,138 +637,196 @@ export default function AstroReport() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-white/20">
-                    <TableHead className="text-white">Planet</TableHead>
-                    <TableHead className="text-white">House</TableHead>
-                    <TableHead className="text-white">Sign</TableHead>
-                    <TableHead className="text-white">Degree</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {reportData.planetPositions.map((position, index) => (
-                    <TableRow key={index} className="border-white/10">
-                      <TableCell className="text-gray-300 font-medium">{position.planet}</TableCell>
-                      <TableCell className="text-gray-300">{position.house}</TableCell>
-                      <TableCell className="text-gray-300">{position.sign}</TableCell>
-                      <TableCell className="text-gray-300">{position.degree}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <div className="overflow-x-auto rounded-lg border border-white/20">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-white/20 bg-gradient-to-r from-purple-500/20 to-blue-500/20">
+                      <th className="text-left p-4 text-white font-semibold">🪐 Planet</th>
+                      <th className="text-left p-4 text-white font-semibold">🏠 House</th>
+                      <th className="text-left p-4 text-white font-semibold">♈ Sign</th>
+                      <th className="text-left p-4 text-white font-semibold">📐 Degree</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reportData.planetPositions.map((position, index) => (
+                      <tr 
+                        key={index} 
+                        className="border-b border-white/10 hover:bg-white/5 transition-colors duration-200"
+                      >
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-yellow-300 font-medium">
+                              {position.planet.includes('(') ? position.planet.split(' ')[0] : position.planet}
+                            </span>
+                            <span className="text-gray-400 text-sm">
+                              {position.planet.includes('(') ? `(${position.planet.match(/\((.*?)\)/)?.[1]})` : ''}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-purple-300 font-semibold">{position.house}</span>
+                            <span className="text-gray-400 text-sm">
+                              {['Self', 'Wealth', 'Siblings', 'Home', 'Children', 'Health', 'Marriage', 'Secrets', 'Fortune', 'Career', 'Gains', 'Loss'][position.house - 1]}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-blue-300 font-medium">
+                              {position.sign.split(' ')[0]}
+                            </span>
+                            <span className="text-gray-400 text-sm">
+                              {position.sign.includes('(') ? `(${position.sign.match(/\((.*?)\)/)?.[1]})` : ''}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <span className="text-green-300 font-mono">{position.degree}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+              {/* Table Legend */}
+              <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <h4 className="text-white font-medium mb-2">🪐 Planet Meanings:</h4>
+                    <div className="space-y-1 text-xs">
+                      <div className="text-gray-300">☉ Sun (Surya) - Soul, Authority, Father</div>
+                      <div className="text-gray-300">☽ Moon (Chandra) - Mind, Emotions, Mother</div>
+                      <div className="text-gray-300">♂ Mars (Mangal) - Energy, Action, Courage</div>
+                      <div className="text-gray-300">☿ Mercury (Budh) - Communication, Intelligence</div>
+                      <div className="text-gray-300">♃ Jupiter (Guru) - Wisdom, Fortune, Teacher</div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-medium mb-2">🏠 Key Houses:</h4>
+                    <div className="space-y-1 text-xs">
+                      <div className="text-gray-300">1st - Self, Personality, Physical Body</div>
+                      <div className="text-gray-300">7th - Marriage, Partnerships, Spouse</div>
+                      <div className="text-gray-300">10th - Career, Reputation, Status</div>
+                      <div className="text-gray-300">4th - Home, Mother, Comfort, Property</div>
+                      <div className="text-gray-300">5th - Children, Creativity, Education</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         )}
 
-                 {/* Card 4: Detailed Analysis */}
-         {reportData && reportData.detailedAnalysis && (
-           <Card className="backdrop-blur-md bg-white/10 border-white/20">
-             <CardHeader>
-               <CardTitle className="flex items-center gap-2 text-white">
-                 <Star className="h-5 w-5 text-purple-300" />
-                 Detailed Planetary Analysis
-               </CardTitle>
-               <CardDescription className="text-gray-300">
-                 In-depth explanation of planetary positions and their impacts
-               </CardDescription>
-             </CardHeader>
-             <CardContent>
-               <div className="space-y-4">
-                 <div className="p-6 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 min-h-[200px]">
-                   <div className="text-gray-300 leading-relaxed space-y-4">
-                     {reportData.detailedAnalysis.split('\n\n').map((paragraph, index) => (
-                       <p key={index} className="text-sm md:text-base">
-                         {paragraph.trim()}
-                       </p>
-                     ))}
-                   </div>
-                 </div>
-               </div>
-             </CardContent>
-           </Card>
-         )}
+        {/* Card 4: Detailed Analysis */}
+        {reportData && reportData.detailedAnalysis && (
+          <Card className="backdrop-blur-md bg-white/10 border-white/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Star className="h-5 w-5 text-purple-300" />
+                Detailed Planetary Analysis
+              </CardTitle>
+              <CardDescription className="text-gray-300">
+                In-depth explanation of planetary positions and their impacts
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="p-6 rounded-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 min-h-[200px]">
+                  <div className="text-gray-300 leading-relaxed space-y-4">
+                    {reportData.detailedAnalysis.split('\n\n').map((paragraph, index) => (
+                      <p key={index} className="text-sm md:text-base">
+                        {paragraph.trim()}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-                 {/* Card 5: Yogas */}
-         {reportData && reportData.yogas && reportData.yogas.length > 0 && (
-           <Card className="backdrop-blur-md bg-white/10 border-white/20">
-             <CardHeader>
-               <CardTitle className="flex items-center gap-2 text-white">
-                 <Star className="h-5 w-5 text-yellow-300" />
-                 Planetary Yogas
-               </CardTitle>
-               <CardDescription className="text-gray-300">
-                 Special planetary combinations in your birth chart
-               </CardDescription>
-             </CardHeader>
-             <CardContent>
-               <div className="space-y-3">
-                 {reportData.yogas.map((yoga, index) => (
-                   <div key={index} className="p-4 rounded-lg bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20">
-                     <div className="flex items-start gap-3">
-                       <Star className="h-5 w-5 text-yellow-300 mt-1 flex-shrink-0" />
-                       <div>
-                         <p className="text-yellow-200 font-medium mb-1">
-                           {yoga.split(' - ')[0]}
-                         </p>
-                         <p className="text-gray-300 text-sm">
-                           {yoga.split(' - ')[1] || yoga}
-                         </p>
-                       </div>
-                     </div>
-                   </div>
-                 ))}
-               </div>
-             </CardContent>
-           </Card>
-         )}
+        {/* Card 5: Yogas */}
+        {reportData && reportData.yogas && reportData.yogas.length > 0 && (
+          <Card className="backdrop-blur-md bg-white/10 border-white/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Star className="h-5 w-5 text-yellow-300" />
+                Planetary Yogas
+              </CardTitle>
+              <CardDescription className="text-gray-300">
+                Special planetary combinations in your birth chart
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {reportData.yogas.map((yoga, index) => (
+                  <div key={index} className="p-4 rounded-lg bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20">
+                    <div className="flex items-start gap-3">
+                      <Star className="h-5 w-5 text-yellow-300 mt-1 flex-shrink-0" />
+                      <div>
+                        <p className="text-yellow-200 font-medium mb-1">
+                          {yoga.split(' - ')[0]}
+                        </p>
+                        <p className="text-gray-300 text-sm">
+                          {yoga.split(' - ')[1] || yoga}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-         {/* Card 6: Dasha Analysis */}
-         {reportData && reportData.dashaAnalysis && (
-           <Card className="backdrop-blur-md bg-white/10 border-white/20">
-             <CardHeader>
-               <CardTitle className="flex items-center gap-2 text-white">
-                 <Clock className="h-5 w-5 text-blue-300" />
-                 Dasha Analysis
-               </CardTitle>
-               <CardDescription className="text-gray-300">
-                 Current planetary time periods and their influences
-               </CardDescription>
-             </CardHeader>
-             <CardContent>
-               <div className="p-4 rounded-lg bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-500/20">
-                 <p className="text-gray-300 whitespace-pre-line leading-relaxed">
-                   {reportData.dashaAnalysis}
-                 </p>
-               </div>
-             </CardContent>
-           </Card>
-         )}
+        {/* Card 6: Dasha Analysis */}
+        {reportData && reportData.dashaAnalysis && (
+          <Card className="backdrop-blur-md bg-white/10 border-white/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Clock className="h-5 w-5 text-blue-300" />
+                Dasha Analysis
+              </CardTitle>
+              <CardDescription className="text-gray-300">
+                Current planetary time periods and their influences
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="p-4 rounded-lg bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-500/20">
+                <p className="text-gray-300 whitespace-pre-line leading-relaxed">
+                  {reportData.dashaAnalysis}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-         {/* Card 7: Remedies */}
-         {reportData && (
-           <Card className="backdrop-blur-md bg-white/10 border-white/20">
-             <CardHeader>
-               <CardTitle className="flex items-center gap-2 text-white">
-                 <Sparkles className="h-5 w-5 text-purple-300" />
-                 Vedic Remedies & Suggestions
-               </CardTitle>
-               <CardDescription className="text-gray-300">
-                 Traditional Hindu remedies to enhance positive planetary influences
-               </CardDescription>
-             </CardHeader>
-             <CardContent>
-               <div className="space-y-3">
-                 {reportData.remedies.map((remedy, index) => (
-                   <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
-                     <Star className="h-4 w-4 text-purple-300 mt-1 flex-shrink-0" />
-                     <span className="text-gray-300">{remedy}</span>
-                   </div>
-                 ))}
-               </div>
-             </CardContent>
-           </Card>
-         )}
+        {/* Card 7: Remedies */}
+        {reportData && (
+          <Card className="backdrop-blur-md bg-white/10 border-white/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Sparkles className="h-5 w-5 text-purple-300" />
+                Vedic Remedies & Suggestions
+              </CardTitle>
+              <CardDescription className="text-gray-300">
+                Traditional Hindu remedies to enhance positive planetary influences
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {reportData.remedies.map((remedy, index) => (
+                  <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                    <Star className="h-4 w-4 text-purple-300 mt-1 flex-shrink-0" />
+                    <span className="text-gray-300">{remedy}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )
