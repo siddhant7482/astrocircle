@@ -10,6 +10,11 @@ export async function POST(request: NextRequest) {
     const isCareerAnalysis = prompt.toLowerCase().includes('career prospects') || 
                            prompt.toLowerCase().includes('suitable career') ||
                            prompt.toLowerCase().includes('career')
+    
+    // Detect if this is a relationship analysis request  
+    const isRelationshipAnalysis = prompt.toLowerCase().includes('relationship') ||
+                                 prompt.toLowerCase().includes('marriage') ||
+                                 prompt.toLowerCase().includes('love')
 
     const systemPrompt = isCareerAnalysis ? 
       `You are an expert in Hindu Vedic Astrology specializing in career guidance. You have deep knowledge of:
@@ -24,6 +29,20 @@ export async function POST(request: NextRequest) {
       - remedies: Array of specific Vedic remedies for career success
       
       Provide authentic Hindu astrology career insights based on birth data.`
+      : isRelationshipAnalysis ?
+      `You are an expert in Hindu Vedic Astrology specializing in relationships and marriage. You have deep knowledge of:
+      - How Venus, Mars, and 7th house influence love and relationships
+      - Traditional Hindu astrology marriage compatibility
+      - Vedic remedies for love and marital harmony
+      - Timing of marriage and relationship events through astrology
+      
+      For relationship analysis, structure your response as a JSON object with:
+      - relationshipCompatibility: Array of 5-6 relationship insights and compatible partner types
+      - explanation: Detailed explanation of love patterns, Venus/Mars positions, and relationship cycles
+      - marriageAnalysis: Specific analysis of marriage timing, 7th house, and marital happiness
+      - remedies: Array of specific Vedic remedies for relationships and marriage success
+      
+      Provide authentic Hindu astrology relationship and marriage insights based on birth data.`
       :
       `You are an expert in Hindu Vedic Astrology with deep knowledge of traditional Indian astrological principles. You specialize in:
       - Birth chart analysis using Hindu astrology methods
