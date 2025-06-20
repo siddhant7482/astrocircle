@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,48 +22,29 @@ export default function LoginForm() {
     setError('')
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       })
 
-      if (error) {
-        throw error
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed')
       }
 
-      if (data.user) {
-        // Check if profile exists, create minimal one if not
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', data.user.id)
-          .single()
-
-        if (profileError && profileError.code === 'PGRST116') {
-          // Profile doesn't exist, create minimal one
-          const { error: insertError } = await supabase
-            .from('profiles')
-            .insert({
-              id: data.user.id,
-              email: data.user.email,
-              full_name: null,
-              birth_date: null,
-              birth_place: null,
-              birth_time: null,
-            })
-
-          if (insertError) {
-            console.error('Error creating profile:', insertError)
-          }
-        }
-
-        setSuccess('Success! Redirecting...')
-        
-        // Hard redirect to dashboard
-        setTimeout(() => {
-          window.location.href = '/dashboard'
-        }, 1000)
-      }
+      setSuccess('Success! Redirecting...')
+      
+      // Hard redirect to dashboard
+      setTimeout(() => {
+        window.location.href = '/dashboard'
+      }, 1000)
     } catch (error) {
       console.error('Login error:', error)
       const errorMessage = error instanceof Error ? error.message : 'An error occurred during login'

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@/lib/hooks/use-user'
+import { useAuth } from '@/lib/AuthContext'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2, Plus, Star, User, Sun, Moon, Sparkles } from 'lucide-react'
@@ -18,7 +18,7 @@ interface DailyHoroscope {
 }
 
 export default function Dashboard() {
-  const { user, loading } = useUser()
+  const { user, isLoading, isAuthenticated } = useAuth()
   const router = useRouter()
   const [isRedirecting, setIsRedirecting] = useState(false)
   const [profileData, setProfileData] = useState<UserProfile | null>(null)
@@ -26,11 +26,11 @@ export default function Dashboard() {
   const [isGeneratingHoroscope, setIsGeneratingHoroscope] = useState(false)
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isLoading && !isAuthenticated) {
       setIsRedirecting(true)
       router.push('/login')
     }
-  }, [user, loading, router])
+  }, [isAuthenticated, isLoading, router])
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -153,7 +153,7 @@ export default function Dashboard() {
     }
   }
 
-  if (loading || isRedirecting) {
+  if (isLoading || isRedirecting) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
         <div className="text-center">

@@ -1,42 +1,41 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req: request, res })
+export function middleware(request: NextRequest) {
+  // Get the pathname
+  const pathname = request.nextUrl.pathname
 
-  // Check auth state
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  // Check if user has session cookie
+  const sessionId = request.cookies.get('session_id')
+  const isAuthenticated = !!sessionId
 
-  // Handle auth routes - redirect authenticated users away from login/signup
-  if (['/login', '/signup', '/register'].includes(request.nextUrl.pathname)) {
-    if (session) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
-    return res
-  }
+  // Define protected routes
+  const protectedRoutes = ['/dashboard', '/profile', '/chat', '/astro-report', '/career', '/health', '/relationships']
+  const authRoutes = ['/login', '/register', '/signup']
 
-  // Protect sensitive routes (but NOT dashboard or profile - let ConditionalLayout handle these)
-  const protectedRoutes = ['/settings', '/admin']
-  if (!session && protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
+  // If user is trying to access protected routes without auth
+  if (protectedRoutes.some(route => pathname.startsWith(route)) && !isAuthenticated) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  return res
+  // If user is authenticated and trying to access auth routes, redirect to dashboard
+  if (authRoutes.some(route => pathname.startsWith(route)) && isAuthenticated) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
+     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public (public files)
+     * - public folder
      */
-    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
   ],
 } 

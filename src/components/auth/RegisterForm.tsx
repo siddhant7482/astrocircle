@@ -2,13 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
 export function RegisterForm() {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,61 +18,46 @@ export function RegisterForm() {
     birthPlace: '',
     birthTime: ''
   })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
+    
     try {
-      // 1. Sign up with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          fullName: formData.fullName,
+          birthDate: formData.birthDate,
+          birthPlace: formData.birthPlace,
+          birthTime: formData.birthTime
+        }),
       })
-      if (authError) throw authError
-      const user = authData.user
-      if (!user) throw new Error('No user returned from signup')
-      
-      // 2. Check if profile already exists (to avoid duplicate key error)
-      const { data: existingProfile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', user.id)
-        .single()
-      
-      if (!existingProfile) {
-        // 3. Create profile row only if it doesn't exist
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([
-            {
-              id: user.id,
-              email: formData.email,
-              full_name: formData.fullName,
-              birth_date: formData.birthDate,
-              birth_place: formData.birthPlace,
-              birth_time: formData.birthTime
-            }
-          ])
-        if (profileError) throw profileError
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed')
       }
-      
-      // 4. Redirect to dashboard
+
+      // Redirect to dashboard on success
       router.push('/dashboard')
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Unknown error occurred')
-      if (error.message?.includes('already registered')) {
-        setError('This email is already registered. Please try logging in instead.')
-      } else {
-        setError(error.message || 'An error occurred during registration')
-      }
+      setError(error.message || 'An error occurred during registration')
     } finally {
       setLoading(false)
     }

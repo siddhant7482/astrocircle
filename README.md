@@ -269,4 +269,67 @@ The AI integration is primarily used in the planetary positions service (`src/li
 - Zodiac sign positions (in Sanskrit)
 - Precise degree calculations
 
+## Security Features
+
+This application implements secure authentication patterns:
+- **Server-side authentication**: All auth operations happen on the server using API routes
+- **HTTP-only cookies**: Session tokens are stored in secure, HTTP-only cookies
+- **No exposed keys**: Supabase service role key is never exposed to the browser
+- **Protected routes**: Middleware protects authenticated pages
+
+## Environment Variables
+
+Create a `.env.local` file with the following variables:
+
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
+
+# OpenRouter API Key  
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+```
+
+**Important**: The `SUPABASE_SERVICE_ROLE_KEY` is required for secure server-side operations. You can find this key in your Supabase dashboard under Settings > API. This key should never be exposed to the client.
+
+## Authentication Flow
+
+1. **Login/Register**: Frontend sends credentials to API routes (`/api/auth/login`, `/api/auth/register`)
+2. **Server verification**: API routes use the service role key to authenticate with Supabase
+3. **Cookie storage**: Session tokens are stored in HTTP-only cookies
+4. **Session management**: The `/api/auth/session` endpoint validates sessions server-side
+5. **Logout**: The `/api/auth/logout` endpoint clears session cookies
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up your environment variables (see above)
+4. Run the development server: `npm run dev`
+
+## API Routes
+
+### Authentication
+- `POST /api/auth/login` - Login with email/password
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/logout` - Logout and clear session
+- `GET /api/auth/session` - Get current session
+
+### Profile
+- `GET /api/profile` - Get user profile
+- `PUT /api/profile` - Update user profile
+
+### Astrology
+- `POST /api/planetary-positions` - Calculate planetary positions
+- `POST /api/astro-report` - Generate astrology report
+- `POST /api/horoscope` - Get horoscope reading
+- `POST /api/chat` - Chat with AI astrologer
+
+All authenticated API routes require valid session cookies and will return 401 if not authenticated.
+
+## Database Schema
+
+// ... existing content ...
+
 
