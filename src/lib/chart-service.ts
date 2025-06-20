@@ -109,7 +109,7 @@ export async function getChartForUser(userId: string): Promise<ChartData | null>
     }
 
     const chartResponse: ApiResponse = await response.json();
-    console.log('Raw API Response:', JSON.stringify(chartResponse, null, 2));
+    // Process API response for chart data
 
     // Try to find the SVG code in various possible locations in the response
     const svgCode = 

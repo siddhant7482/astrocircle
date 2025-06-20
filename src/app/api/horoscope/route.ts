@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    console.log('Request body received:', JSON.stringify(body, null, 2));
+    // Validate request body
     const { birthDate, birthTime, birthPlace } = body;
 
     // Validate required parameters
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     }
 
     let content = responseData.choices[0].message.content;
-    console.log('Raw API response content:', content);
+    // Parse the AI response content
 
     // Extract JSON from the content if it contains markdown code blocks
     if (content.includes('```json')) {
