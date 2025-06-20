@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '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'
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
 
 export async function POST(request: NextRequest) {
   try {
+    if (!OPENROUTER_API_KEY) {
+      throw new Error('OpenRouter API key not configured')
+    }
+
     const { prompt } = await request.json()
     
     // Detect if this is a career analysis request

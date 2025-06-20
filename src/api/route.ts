@@ -3,9 +3,8 @@ import { headers } from 'next/headers'
 
 export async function POST(req: Request) {
   try {
-    // Debug log to check environment variable
+    // Debug log to check environment variable (safe logging)
     console.log('API Key available:', !!process.env.OPENROUTER_API_KEY)
-    console.log('API Key value:', process.env.OPENROUTER_API_KEY)
 
     const { messages } = await req.json()
     const headersList = await headers()
