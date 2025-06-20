@@ -1,16 +1,15 @@
-import Link from 'next/link'
-import { RegisterForm } from '@/components/auth/RegisterForm'
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function SignUpPage() {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-      <RegisterForm />
-      <p className="mt-4 text-sm text-muted-foreground">
-        Already have an account?{' '}
-        <Link href="/login" className="text-primary hover:underline">
-          Sign in
-        </Link>
-      </p>
-    </div>
-  )
+  const router = useRouter()
+  
+  useEffect(() => {
+    // Redirect to register page for consistency
+    router.replace('/register')
+  }, [router])
+  
+  return null
 } 
