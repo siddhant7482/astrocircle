@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { getUserProfile, updateUserProfile } from "@/lib/supabase/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,9 +22,39 @@ interface Profile {
   birth_date: string | null;
   birth_time: string | null;
   birth_place: string | null;
-  birth_coordinates: string | null;
+  created_at: string;
   updated_at: string;
 }
+
+// Move AnimatedCard outside component to prevent re-creation
+const AnimatedCard = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className="w-full h-full cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        transform: isHovered ? 'translateZ(10px) scale(1.02)' : 'translateZ(0px) scale(1)',
+        transition: 'transform 0.3s ease-out',
+        animationDelay: `${delay}ms`
+      }}
+    >
+      <Card 
+        className="relative backdrop-blur-md bg-white/10 border-white/20 transition-all duration-300 w-full h-full overflow-hidden shadow-xl"
+        style={{
+          borderColor: isHovered ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
+          boxShadow: isHovered 
+            ? '0 25px 50px -12px rgba(147, 51, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2)'
+            : '0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        {children}
+      </Card>
+    </div>
+  );
+};
 
 export function ProfileForm({ userId, email }: ProfileFormProps) {
   const router = useRouter();
@@ -42,11 +72,7 @@ export function ProfileForm({ userId, email }: ProfileFormProps) {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .single();
+        const profile = await getUserProfile(userId);
 
         if (profile) {
           setExistingProfile(profile);
@@ -76,23 +102,17 @@ export function ProfileForm({ userId, email }: ProfileFormProps) {
         throw new Error('Please fill in all required fields');
       }
 
-      // Try to upsert the profile (insert if not exists, update if exists)
-      const { error: upsertError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: userId,
-          email,
-          full_name: fullName,
-          birth_date: birthDate,
-          birth_time: birthTime,
-          birth_place: birthPlace,
-          birth_coordinates: null,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'id'
-        });
+      // Update profile using secure API
+      const success = await updateUserProfile(userId, {
+        full_name: fullName,
+        birth_date: birthDate,
+        birth_time: birthTime,
+        birth_place: birthPlace,
+      });
 
-      if (upsertError) throw upsertError;
+      if (!success) {
+        throw new Error('Failed to update profile');
+      }
 
       setSuccess('Profile updated successfully!');
       setIsEditing(false);
@@ -111,34 +131,7 @@ export function ProfileForm({ userId, email }: ProfileFormProps) {
     }
   };
 
-  const AnimatedCard = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
-    const [isHovered, setIsHovered] = useState(false);
 
-    return (
-      <div
-        className="w-full h-full cursor-pointer"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        style={{
-          transform: isHovered ? 'translateZ(10px) scale(1.02)' : 'translateZ(0px) scale(1)',
-          transition: 'transform 0.3s ease-out',
-          animationDelay: `${delay}ms`
-        }}
-      >
-        <Card 
-          className="relative backdrop-blur-md bg-white/10 border-white/20 transition-all duration-300 w-full h-full overflow-hidden shadow-xl"
-          style={{
-            borderColor: isHovered ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
-            boxShadow: isHovered 
-              ? '0 25px 50px -12px rgba(147, 51, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2)'
-              : '0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
-          }}
-        >
-          {children}
-        </Card>
-      </div>
-    );
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative z-10">

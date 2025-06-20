@@ -1,13 +1,13 @@
 'use client';
 
 import { ProfileForm } from "@/components/profile/ProfileForm";
-import { useUser } from "@/lib/hooks/use-user";
+import { useAuth } from "@/lib/AuthContext";
 import { Loader2 } from "lucide-react";
 
 export default function ProfilePage() {
-  const { user, loading } = useUser();
+  const { user, isLoading, isAuthenticated } = useAuth();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -18,7 +18,7 @@ export default function ProfilePage() {
     );
   }
 
-  if (!user || !user.id || !user.email) {
+  if (!isAuthenticated || !user || !user.id || !user.email) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
