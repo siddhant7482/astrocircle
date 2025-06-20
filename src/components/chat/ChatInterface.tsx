@@ -60,10 +60,10 @@ export function ChatInterface() {
     if (!user || !user.id) return
     
     try {
-      console.log('Fetching profile for user:', user.id)
+      // Fetching profile for user
       const profile: UserProfile | null = await getUserProfile(user.id)
       if (profile) {
-        console.log('Profile loaded:', profile)
+        // Profile loaded successfully
         setUserInfo({
           name: profile.full_name || '',
           dateOfBirth: profile.birth_date || '',
@@ -72,7 +72,7 @@ export function ChatInterface() {
         })
         setProfileLoaded(true)
       } else {
-        console.log('No profile found for user')
+        // No profile found for user
         setProfileLoaded(false)
       }
     } catch (error) {

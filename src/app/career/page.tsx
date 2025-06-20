@@ -146,27 +146,23 @@ export default function Career() {
           // Check if we got career-specific response from DeepSeek
           if (apiResponse.suitableCareers && Array.isArray(apiResponse.suitableCareers)) {
             analysisData.suitableCareers = apiResponse.suitableCareers
-            console.log('✅ Using DeepSeek AI career recommendations')
+            // Using DeepSeek AI career recommendations
           }
           
           if (apiResponse.explanation && typeof apiResponse.explanation === 'string') {
             analysisData.explanation = apiResponse.explanation
-            console.log('✅ Using DeepSeek AI career explanation')
+            // Using DeepSeek AI career explanation
           }
           
           if (apiResponse.remedies && Array.isArray(apiResponse.remedies)) {
             analysisData.remedies = apiResponse.remedies
-            console.log('✅ Using DeepSeek AI career remedies')
+            // Using DeepSeek AI career remedies
           }
           
-          console.log('🤖 DeepSeek AI Response:', {
-            hasCareers: !!apiResponse.suitableCareers,
-            hasExplanation: !!apiResponse.explanation,
-            hasRemedies: !!apiResponse.remedies
-          })
+          // DeepSeek AI Response processed
         }
               } catch {
-          console.log('API call failed, using fallback career data')
+          // API call failed, using fallback career data
         }
 
       setCareerData({

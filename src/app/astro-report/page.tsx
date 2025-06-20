@@ -139,7 +139,7 @@ export default function AstroReport() {
   const generateAstroChart = async () => {
     setIsGenerating(true)
     try {
-      console.log('Generating AI-powered Vedic chart for:', userInfo)
+      // Generating AI-powered Vedic chart
       
       // Use DeepSeek AI to generate planetary positions and analysis
       const chartPrompt = `Based on Hindu Vedic Astrology, calculate the planetary positions and generate a birth chart for:
@@ -197,15 +197,15 @@ export default function AstroReport() {
 
         if (response.ok) {
           const aiResponse = await response.json()
-          console.log('🤖 DeepSeek AI Chart Response:', aiResponse)
+          // DeepSeek AI Chart Response processed
           
           // Use AI-generated planetary positions if available
           let finalPositions = fallbackPositions
           if (aiResponse.planetPositions && Array.isArray(aiResponse.planetPositions) && aiResponse.planetPositions.length > 0) {
             finalPositions = aiResponse.planetPositions
-            console.log('✅ Using DeepSeek AI planetary positions')
+            // Using DeepSeek AI planetary positions
           } else {
-            console.log('⚠️ AI positions not available, using calculated positions')
+            // AI positions not available, using calculated positions
           }
 
           // Update with AI analysis
@@ -223,8 +223,8 @@ export default function AstroReport() {
         } else {
           throw new Error('AI analysis failed')
         }
-      } catch (aiError) {
-        console.log('🔄 AI call failed, using fallback data:', aiError)
+              } catch {
+        // AI call failed, using fallback data
         
         // Use fallback positions and continue with detailed analysis
         setReportData({
@@ -273,7 +273,7 @@ export default function AstroReport() {
 
       if (response.ok) {
         const rawResponse = await response.json()
-        console.log('Raw API Response:', rawResponse)
+        // Processing AI response
         
         // Extract clean text content, removing any JSON formatting
         let cleanContent = rawResponse

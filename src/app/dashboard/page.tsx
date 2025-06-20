@@ -18,19 +18,18 @@ interface DailyHoroscope {
 }
 
 export default function Dashboard() {
-  const { user, isLoading, isAuthenticated } = useAuth()
+  const { user, isLoading, isAuthenticated, isRedirecting, setIsRedirecting } = useAuth()
   const router = useRouter()
-  const [isRedirecting, setIsRedirecting] = useState(false)
   const [profileData, setProfileData] = useState<UserProfile | null>(null)
   const [dailyHoroscope, setDailyHoroscope] = useState<DailyHoroscope | null>(null)
   const [isGeneratingHoroscope, setIsGeneratingHoroscope] = useState(false)
 
+  // Clear any redirect state when user is authenticated
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      setIsRedirecting(true)
-      router.push('/login')
+    if (isAuthenticated && isRedirecting) {
+      setIsRedirecting(false)
     }
-  }, [isAuthenticated, isLoading, router])
+  }, [isAuthenticated, isRedirecting, setIsRedirecting])
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -51,9 +50,11 @@ export default function Dashboard() {
       }
     }
 
-    fetchUserProfile()
+    if (user?.id) {
+      fetchUserProfile()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+  }, [user?.id])
 
   const generateDailyHoroscope = async (profile?: UserProfile) => {
     const userProfile = profile || profileData
@@ -119,7 +120,7 @@ export default function Dashboard() {
           
           if (apiResponse.prediction && typeof apiResponse.prediction === 'string') {
             horoscopeData.prediction = apiResponse.prediction
-            console.log('✅ Using AI daily prediction')
+            // Using AI daily prediction
           }
           
           if (apiResponse.luckyNumber && typeof apiResponse.luckyNumber === 'number') {
@@ -139,7 +140,7 @@ export default function Dashboard() {
           }
         }
       } catch {
-        console.log('API call failed, using fallback horoscope')
+        // API call failed, using fallback horoscope
       }
 
       // Store in localStorage for today

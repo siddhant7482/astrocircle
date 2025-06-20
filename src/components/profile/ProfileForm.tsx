@@ -57,7 +57,7 @@ export function ProfileForm({ userId, email }: ProfileFormProps) {
           setIsEditing(false);
         }
       } catch {
-        console.log('No existing profile found');
+        // No existing profile found
       }
     };
 

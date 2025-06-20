@@ -12,6 +12,8 @@ type AuthContextType = {
   isLoading: boolean
   isAuthenticated: boolean
   user: User | null
+  isRedirecting: boolean
+  setIsRedirecting: (value: boolean) => void
   signOut: () => Promise<void>
 }
 
@@ -21,16 +23,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [isRedirecting, setIsRedirecting] = useState(false)
   const router = useRouter()
+
+
 
   useEffect(() => {
     checkSession()
     
-    // Failsafe: stop loading after 10 seconds
+    // Failsafe: stop loading after 5 seconds (but don't log out if already authenticated)
     const timeout = setTimeout(() => {
-      console.warn('Auth check timeout - forcing loading to false')
       setIsLoading(false)
-    }, 10000)
+      // Don't log out if user is already authenticated
+    }, 5000)
     
     return () => clearTimeout(timeout)
   }, [])
@@ -86,6 +91,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isLoading,
       isAuthenticated,
       user,
+      isRedirecting,
+      setIsRedirecting,
       signOut
     }}>
       {children}

@@ -151,33 +151,28 @@ export default function Relationships() {
           // Check if we got relationship-specific response from DeepSeek
           if (apiResponse.relationshipCompatibility && Array.isArray(apiResponse.relationshipCompatibility)) {
             analysisData.relationshipCompatibility = apiResponse.relationshipCompatibility
-            console.log('✅ Using DeepSeek AI relationship compatibility')
+            // Using DeepSeek AI relationship compatibility
           }
           
           if (apiResponse.explanation && typeof apiResponse.explanation === 'string') {
             analysisData.explanation = apiResponse.explanation
-            console.log('✅ Using DeepSeek AI relationship explanation')
+            // Using DeepSeek AI relationship explanation
           }
           
           if (apiResponse.marriageAnalysis && typeof apiResponse.marriageAnalysis === 'string') {
             analysisData.marriageAnalysis = apiResponse.marriageAnalysis
-            console.log('✅ Using DeepSeek AI marriage analysis')
+            // Using DeepSeek AI marriage analysis
           }
           
           if (apiResponse.remedies && Array.isArray(apiResponse.remedies)) {
             analysisData.remedies = apiResponse.remedies
-            console.log('✅ Using DeepSeek AI relationship remedies')
+            // Using DeepSeek AI relationship remedies
           }
           
-          console.log('🤖 DeepSeek AI Response:', {
-            hasCompatibility: !!apiResponse.relationshipCompatibility,
-            hasExplanation: !!apiResponse.explanation,
-            hasMarriage: !!apiResponse.marriageAnalysis,
-            hasRemedies: !!apiResponse.remedies
-          })
+          // DeepSeek AI Response processed
         }
       } catch {
-        console.log('API call failed, using fallback relationship data')
+        // API call failed, using fallback relationship data
       }
 
       setRelationshipData({

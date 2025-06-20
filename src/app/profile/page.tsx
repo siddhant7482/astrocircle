@@ -18,6 +18,16 @@ export default function ProfilePage() {
     );
   }
 
-  // At this point, ConditionalLayout guarantees user is authenticated
-  return <ProfileForm userId={user!.id} email={user!.email!} />;
+  if (!user || !user.id || !user.email) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
+          <p className="text-gray-300">Authenticating...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <ProfileForm userId={user.id} email={user.email} />;
 } 

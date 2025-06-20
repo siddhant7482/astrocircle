@@ -1,4 +1,6 @@
 import { randomBytes } from 'crypto'
+import { writeFileSync, readFileSync, existsSync } from 'fs'
+import { join } from 'path'
 
 interface SessionData {
   userId: string
@@ -8,8 +10,46 @@ interface SessionData {
   expiresAt: number
 }
 
-// In-memory session store (in production, use Redis or database)
+// In-memory session store with file persistence for development
 const sessions = new Map<string, SessionData>()
+
+// File path for session persistence in development
+const sessionFilePath = join(process.cwd(), '.sessions.json')
+
+// Load sessions from file on startup (development only)
+function loadSessionsFromFile() {
+  if (process.env.NODE_ENV === 'development' && existsSync(sessionFilePath)) {
+    try {
+      const data = readFileSync(sessionFilePath, 'utf-8')
+      const savedSessions = JSON.parse(data)
+      const now = Date.now()
+      
+      // Only load non-expired sessions
+      for (const [sessionId, sessionData] of Object.entries(savedSessions)) {
+        if ((sessionData as SessionData).expiresAt > now) {
+          sessions.set(sessionId, sessionData as SessionData)
+        }
+      }
+    } catch (error) {
+      console.error('Error loading sessions from file:', error)
+    }
+  }
+}
+
+// Save sessions to file (development only)
+function saveSessionsToFile() {
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      const sessionObject = Object.fromEntries(sessions)
+      writeFileSync(sessionFilePath, JSON.stringify(sessionObject, null, 2))
+    } catch (error) {
+      console.error('Error saving sessions to file:', error)
+    }
+  }
+}
+
+// Load sessions on module initialization
+loadSessionsFromFile()
 
 export function generateSessionId(): string {
   return randomBytes(32).toString('hex')
@@ -32,6 +72,9 @@ export function createSession(data: {
     supabaseRefreshToken: data.supabaseRefreshToken,
     expiresAt
   })
+  
+  // Save to file in development
+  saveSessionsToFile()
   
   return sessionId
 }
@@ -64,7 +107,10 @@ export function updateSession(sessionId: string, updates: Partial<SessionData>):
 }
 
 export function deleteSession(sessionId: string): boolean {
-  return sessions.delete(sessionId)
+  const result = sessions.delete(sessionId)
+  // Save to file in development
+  saveSessionsToFile()
+  return result
 }
 
 export function cleanExpiredSessions(): void {

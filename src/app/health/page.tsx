@@ -153,33 +153,28 @@ export default function Health() {
           // Check if we got health-specific response from DeepSeek
           if (apiResponse.healthStrengths && Array.isArray(apiResponse.healthStrengths)) {
             analysisData.healthStrengths = apiResponse.healthStrengths
-            console.log('✅ Using DeepSeek AI health strengths')
+            // Using DeepSeek AI health strengths
           }
           
           if (apiResponse.explanation && typeof apiResponse.explanation === 'string') {
             analysisData.explanation = apiResponse.explanation
-            console.log('✅ Using DeepSeek AI health explanation')
+            // Using DeepSeek AI health explanation
           }
           
           if (apiResponse.vulnerabilities && typeof apiResponse.vulnerabilities === 'string') {
             analysisData.vulnerabilities = apiResponse.vulnerabilities
-            console.log('✅ Using DeepSeek AI health vulnerabilities')
+            // Using DeepSeek AI health vulnerabilities
           }
           
           if (apiResponse.remedies && Array.isArray(apiResponse.remedies)) {
             analysisData.remedies = apiResponse.remedies
-            console.log('✅ Using DeepSeek AI health remedies')
+            // Using DeepSeek AI health remedies
           }
           
-          console.log('🤖 DeepSeek AI Response:', {
-            hasStrengths: !!apiResponse.healthStrengths,
-            hasExplanation: !!apiResponse.explanation,
-            hasVulnerabilities: !!apiResponse.vulnerabilities,
-            hasRemedies: !!apiResponse.remedies
-          })
+          // DeepSeek AI Response processed
         }
       } catch {
-        console.log('API call failed, using fallback health data')
+        // API call failed, using fallback health data
       }
 
       setHealthData({
