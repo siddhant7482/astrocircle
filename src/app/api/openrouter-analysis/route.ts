@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         'X-Title': 'AstroCircle Hindu Vedic Astrology'
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-chat',
+        model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
         messages: [
           {
             role: 'system',

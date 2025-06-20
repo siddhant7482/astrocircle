@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser } from '@/lib/hooks/use-user'
+import { useAuth } from '@/lib/AuthContext'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -35,9 +35,8 @@ interface ReportData {
 }
 
 export default function AstroReport() {
-  const { user, loading } = useUser()
+  const { user, isLoading, isAuthenticated, isRedirecting, setIsRedirecting } = useAuth()
   const router = useRouter()
-  const [isRedirecting, setIsRedirecting] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [userInfo, setUserInfo] = useState<UserInfo>({
     name: '',
@@ -51,11 +50,11 @@ export default function AstroReport() {
   const [profileData, setProfileData] = useState<UserProfile | null>(null)
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isLoading && !isAuthenticated) {
       setIsRedirecting(true)
       router.push('/login')
     }
-  }, [user, loading, router])
+  }, [isAuthenticated, isLoading, router, setIsRedirecting])
 
   // Fetch user profile data when user is available
   useEffect(() => {
@@ -357,7 +356,7 @@ export default function AstroReport() {
     setUserInfo(prev => ({ ...prev, [field]: value }))
   }
 
-  if (loading || isRedirecting || isLoadingProfile) {
+  if (isLoading || isRedirecting || isLoadingProfile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
         <div className="text-center">
@@ -375,17 +374,17 @@ export default function AstroReport() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
+    <div className="container mx-auto px-2 md:px-4 py-4 md:py-8 max-w-full overflow-hidden">
+      <div className="mb-4 md:mb-8 text-center">
+        <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
           Hindu Vedic Astrology Report
         </h1>
-        <p className="text-gray-300 text-lg">
+        <p className="text-gray-300 text-sm md:text-lg">
           Comprehensive astrological analysis based on ancient Hindu Vedic principles
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         {/* Card 1: User Information */}
         <Card className="backdrop-blur-md bg-white/10 border-white/20">
           <CardHeader>
@@ -496,9 +495,9 @@ export default function AstroReport() {
             <CardContent>
               <div className="w-full max-w-2xl mx-auto">
                 {/* Traditional North Indian Vedic Chart */}
-                <div className="relative aspect-square border-2 border-white/30 rounded-lg bg-gradient-to-br from-purple-900/20 to-blue-900/20 backdrop-blur-sm overflow-hidden [&_*]:scrollbar-none [&_*::-webkit-scrollbar]:hidden">
+                <div className="relative aspect-square border-2 border-white/30 rounded-lg bg-gradient-to-br from-purple-900/20 to-blue-900/20 backdrop-blur-sm overflow-hidden [&_*]:scrollbar-none [&_*::-webkit-scrollbar]:hidden min-h-[300px] md:min-h-[400px] max-w-full">
                   {/* Chart Grid - North Indian Style */}
-                  <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 p-1 gap-0.5">
+                  <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 p-0.5 md:p-1 gap-0.5 md:gap-1">
                     {Array.from({ length: 16 }, (_, index) => {
                       // North Indian chart house layout
                       const houseNumbers = [12, 1, 2, 3, 11, '', '', 4, 10, '', '', 5, 9, 8, 7, 6]
@@ -508,7 +507,7 @@ export default function AstroReport() {
                       return (
                         <div
                           key={index}
-                          className={`relative border transition-all duration-300 ${
+                          className={`relative border transition-all duration-300 min-h-[65px] md:min-h-[80px] max-h-[100px] md:max-h-none ${
                             isEmpty 
                               ? 'border-transparent bg-transparent'
                               : 'bg-white/5 border-white/20 hover:bg-white/10 hover:border-purple-300/50'
@@ -517,38 +516,38 @@ export default function AstroReport() {
                           {house && (
                             <>
                               {/* House Number */}
-                              <div className="absolute top-1 left-1 text-purple-200 font-bold text-xs bg-black/30 rounded px-1">
+                              <div className="absolute top-0.5 left-0.5 md:top-1 md:left-1 text-purple-200 font-bold text-xs bg-black/30 rounded px-0.5 md:px-1 leading-none">
                                 {house}
                               </div>
                               
                               {/* Planets in House */}
-                              <div className="p-1 pt-5 h-full flex flex-col justify-center items-center">
-                                <div className="space-y-0.5 text-center">
+                              <div className="p-0.5 pt-3 md:p-1 md:pt-5 h-full flex flex-col justify-center items-center overflow-hidden">
+                                <div className="space-y-0 md:space-y-0.5 text-center w-full max-h-full">
                                   {reportData?.planetPositions
                                     .filter(p => p.house === Number(house))
-                                    .slice(0, 3) // Limit to 3 planets per house to avoid overflow
+                                    .slice(0, 2) // Limit planets to prevent overflow
                                     .map((p, idx) => {
-                                      // Get short planet name
+                                      // Get very short planet names for mobile
                                       const planetShort = p.planet.includes('(') 
-                                        ? p.planet.split(' ')[0] 
-                                        : p.planet.replace('Venus', 'Ve').replace('Jupiter', 'Ju').replace('Mercury', 'Me').replace('Saturn', 'Sa')
+                                        ? p.planet.split(' ')[0].substring(0, 2)
+                                        : p.planet.replace('Sun', 'Su').replace('Moon', 'Mo').replace('Mars', 'Ma').replace('Venus', 'Ve').replace('Jupiter', 'Ju').replace('Mercury', 'Me').replace('Saturn', 'Sa').replace('Rahu', 'Ra').replace('Ketu', 'Ke').substring(0, 2)
                                       
                                       return (
-                                        <div key={idx} className="text-center">
-                                          <div className="text-yellow-300 font-medium text-xs leading-none">
+                                        <div key={idx} className="text-center leading-none truncate w-full">
+                                          <div className="text-yellow-300 font-medium text-xs leading-none truncate">
                                             {planetShort}
                                           </div>
-                                          <div className="text-gray-400 text-xs leading-none">
+                                          <div className="text-gray-400 text-xs leading-none hidden md:block truncate">
                                             {p.sign.split(' ')[0].substring(0, 3)}
                                           </div>
                                         </div>
                                       )
                                     })}
                                   {reportData?.planetPositions.filter(p => p.house === Number(house)).length === 0 && 
-                                    <div className="text-gray-500 text-xs opacity-50">Empty</div>
+                                    <div className="text-gray-500 text-xs opacity-50">-</div>
                                   }
-                                  {reportData && reportData.planetPositions.filter(p => p.house === Number(house)).length > 3 && 
-                                    <div className="text-blue-300 text-xs">+{reportData.planetPositions.filter(p => p.house === Number(house)).length - 3}</div>
+                                  {reportData && reportData.planetPositions.filter(p => p.house === Number(house)).length > 2 && 
+                                    <div className="text-blue-300 text-xs">+{reportData.planetPositions.filter(p => p.house === Number(house)).length - 2}</div>
                                   }
                                 </div>
                               </div>
@@ -561,34 +560,34 @@ export default function AstroReport() {
                   
                   {/* Center Chart Label */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-gradient-to-r from-purple-600/90 to-blue-600/90 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm border border-white/20">
-                      🏛️ Rashi Chart
+                    <div className="bg-gradient-to-r from-purple-600/90 to-blue-600/90 text-white px-1.5 py-0.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold shadow-xl backdrop-blur-sm border border-white/20">
+                      <span className="hidden md:inline">🏛️ </span>Rashi
                     </div>
                   </div>
                 </div>
                 
                 {/* Chart Legend */}
-                <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                    <div className="text-yellow-300 font-medium mb-1">🪐 Planets</div>
+                <div className="mt-4 md:mt-6 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 text-sm">
+                  <div className="text-center p-2 md:p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-yellow-300 font-medium mb-1 text-xs md:text-sm">🪐 Planets</div>
                     <div className="text-gray-400 text-xs">Cosmic Bodies</div>
                   </div>
-                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                    <div className="text-purple-300 font-medium mb-1">🏠 Houses</div>
+                  <div className="text-center p-2 md:p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-purple-300 font-medium mb-1 text-xs md:text-sm">🏠 Houses</div>
                     <div className="text-gray-400 text-xs">Life Areas</div>
                   </div>
-                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                    <div className="text-blue-300 font-medium mb-1">♈ Signs</div>
+                  <div className="text-center p-2 md:p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-blue-300 font-medium mb-1 text-xs md:text-sm">♈ Signs</div>
                     <div className="text-gray-400 text-xs">Zodiac Energy</div>
                   </div>
-                  <div className="text-center p-3 rounded-lg bg-white/5 border border-white/10">
-                    <div className="text-green-300 font-medium mb-1">📐 Degrees</div>
+                  <div className="text-center p-2 md:p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-green-300 font-medium mb-1 text-xs md:text-sm">📐 Degrees</div>
                     <div className="text-gray-400 text-xs">Exact Position</div>
                   </div>
                 </div>
                 
                 {/* Quick House Meanings */}
-                <div className="mt-6 grid grid-cols-3 md:grid-cols-4 gap-2 text-xs">
+                <div className="mt-4 md:mt-6 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1 md:gap-2 text-xs">
                   {[
                     {num: 1, name: "Self", color: "text-red-300"},
                     {num: 2, name: "Wealth", color: "text-orange-300"},
@@ -603,9 +602,9 @@ export default function AstroReport() {
                     {num: 11, name: "Gains", color: "text-lime-300"},
                     {num: 12, name: "Loss", color: "text-amber-300"}
                   ].map(house => (
-                    <div key={house.num} className="text-center p-1 rounded bg-white/5">
-                      <div className={`font-medium ${house.color}`}>{house.num}</div>
-                      <div className="text-gray-400">{house.name}</div>
+                    <div key={house.num} className="text-center p-1 md:p-2 rounded bg-white/5">
+                      <div className={`font-medium text-xs md:text-sm ${house.color}`}>{house.num}</div>
+                      <div className="text-gray-400 text-xs">{house.name}</div>
                     </div>
                   ))}
                 </div>
@@ -637,7 +636,33 @@ export default function AstroReport() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto rounded-lg border border-white/20">
+              {/* Mobile Card Layout */}
+              <div className="block md:hidden space-y-3">
+                {reportData.planetPositions.map((position, index) => (
+                  <div key={index} className="p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-yellow-300 font-medium text-sm">
+                        {position.planet.includes('(') ? position.planet.split(' ')[0] : position.planet}
+                      </div>
+                      <div className="text-green-300 font-mono text-xs">{position.degree}</div>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="text-purple-300 font-semibold">House {position.house}</span>
+                        <span className="text-gray-400">
+                          {['Self', 'Wealth', 'Siblings', 'Home', 'Children', 'Health', 'Marriage', 'Secrets', 'Fortune', 'Career', 'Gains', 'Loss'][position.house - 1]}
+                        </span>
+                      </div>
+                      <div className="text-blue-300">
+                        {position.sign.split(' ')[0]}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table Layout */}
+              <div className="hidden md:block overflow-x-auto rounded-lg border border-white/20">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-white/20 bg-gradient-to-r from-purple-500/20 to-blue-500/20">

@@ -49,14 +49,12 @@ export async function getUserProfile(_userId: string): Promise<UserProfile | nul
     });
 
     if (!response.ok) {
-      console.error('Error fetching user profile:', response.status);
       return null;
     }
 
     const data = await response.json();
     return data.profile;
-  } catch (error) {
-    console.error('Error in getUserProfile:', error);
+  } catch {
     return null;
   }
 }
