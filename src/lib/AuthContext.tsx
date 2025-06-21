@@ -33,10 +33,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     // Failsafe: stop loading after 8 seconds to handle slow network connections
     const timeout = setTimeout(() => {
-      if (isLoading) {
-        console.warn('Authentication check timed out - setting loading to false')
-        setIsLoading(false)
-      }
+      console.warn('Authentication check timed out - setting loading to false')
+      setIsLoading(false)
     }, 8000)
     
     return () => clearTimeout(timeout)
