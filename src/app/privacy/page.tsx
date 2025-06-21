@@ -37,6 +37,25 @@ export default function PrivacyPage() {
           <Card className="backdrop-blur-sm bg-white/10 border-white/20 mb-8">
             <CardContent className="p-8">
               <div className="space-y-8 text-gray-300">
+                {/* Personal Project Disclaimer */}
+                <div className="bg-yellow-500/20 border border-yellow-400/30 rounded-lg p-6 mb-8">
+                  <h2 className="text-yellow-300 font-bold text-xl mb-3 flex items-center gap-2">
+                    🎯 Personal Project Notice
+                  </h2>
+                  <div className="text-yellow-100 space-y-3">
+                    <p className="font-semibold">
+                      AstroCircle is a fun personal project created by Siddhant Bhasin for educational and entertainment purposes only.
+                    </p>
+                    <p>
+                      This is NOT a commercial service. While we take privacy seriously, please understand that this is a hobby project 
+                      with limited resources. Your data is handled with care, but the creator assumes no liability for any data-related issues.
+                    </p>
+                    <p className="font-semibold text-red-200">
+                      ⚠️ Use this service knowing it&apos;s a personal project and at your own discretion.
+                    </p>
+                  </div>
+                </div>
+
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">1. Information We Collect</h2>
                   <p className="mb-4">We collect information you provide directly to us, such as:</p>

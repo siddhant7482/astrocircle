@@ -125,6 +125,25 @@
   }
 }
 
+/* Hide default Next.js loading states */
+@layer utilities {
+  /* Hide default loading spinners and indicators */
+  [data-nextjs-scroll-focus-boundary] {
+    display: contents !important;
+  }
+  
+  /* Hide any default loading overlays */
+  .next-loading,
+  [class*="loading"]:not([class*="animate-"]):not([class*="bg-"]):not([class*="text-"]) {
+    display: none !important;
+  }
+  
+  /* Ensure our custom loading takes priority */
+  [data-loading="custom"] {
+    z-index: 9999 !important;
+  }
+}
+
 /* Floating particle animations */
 @keyframes float {
   0%, 100% {
@@ -208,4 +227,18 @@
 
 .animate-float-fast {
   animation: float-fast 4s ease-in-out infinite;
+}
+
+/* Slow spin animation for header logo */
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
 }

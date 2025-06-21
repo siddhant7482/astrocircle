@@ -37,6 +37,36 @@ export default function DisclaimerPage() {
           <Card className="backdrop-blur-sm bg-white/10 border-white/20 mb-8">
             <CardContent className="p-8">
               <div className="space-y-8 text-gray-300">
+                {/* Personal Project Disclaimer */}
+                <div className="bg-red-500/20 border border-red-400/30 rounded-lg p-6 mb-8">
+                  <h2 className="text-red-300 font-bold text-xl mb-3 flex items-center gap-2">
+                    ⚠️ IMPORTANT: Personal Project Notice
+                  </h2>
+                  <div className="text-red-100 space-y-3">
+                    <p className="font-bold text-lg">
+                      AstroCircle is a FUN PERSONAL PROJECT created by Siddhant Bhasin for educational and entertainment purposes ONLY.
+                    </p>
+                    <p className="font-semibold">
+                      This is NOT a professional astrological service or commercial business. It is a hobby project built for learning and entertainment.
+                    </p>
+                    <div className="bg-red-600/30 border border-red-500/50 rounded p-4 mt-4">
+                      <p className="font-bold text-red-100">
+                        🚨 COMPLETE LIABILITY WAIVER: Siddhant Bhasin (the creator) assumes ABSOLUTELY NO RESPONSIBILITY or LIABILITY for:
+                      </p>
+                      <ul className="list-disc pl-6 mt-2 space-y-1 text-red-100">
+                        <li>Any decisions you make based on this application</li>
+                        <li>Any consequences, damages, or losses resulting from use of this service</li>
+                        <li>The accuracy or reliability of any astrological content</li>
+                        <li>Any technical issues, data loss, or service interruptions</li>
+                        <li>Any other issues whatsoever related to this hobby project</li>
+                      </ul>
+                      <p className="font-bold mt-3 text-red-100">
+                        BY USING THIS SERVICE, YOU ACKNOWLEDGE THIS IS A PERSONAL HOBBY PROJECT AND AGREE TO HOLD THE CREATOR COMPLETELY HARMLESS.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">Entertainment and Guidance Only</h2>
                   <p>

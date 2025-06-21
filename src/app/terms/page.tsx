@@ -37,6 +37,27 @@ export default function TermsPage() {
           <Card className="backdrop-blur-sm bg-white/10 border-white/20 mb-8">
             <CardContent className="p-8">
               <div className="space-y-8 text-gray-300">
+                {/* Personal Project Disclaimer */}
+                <div className="bg-yellow-500/20 border border-yellow-400/30 rounded-lg p-6 mb-8">
+                  <h2 className="text-yellow-300 font-bold text-xl mb-3 flex items-center gap-2">
+                    🎯 Personal Project Notice
+                  </h2>
+                  <div className="text-yellow-100 space-y-3">
+                    <p className="font-semibold">
+                      AstroCircle is a fun personal project created by Siddhant Bhasin for educational and entertainment purposes only.
+                    </p>
+                    <p>
+                      This is NOT a commercial service and should be treated as a hobby project. All astrological readings, 
+                      predictions, and AI-generated content are provided for entertainment purposes only and should not be 
+                      relied upon for serious life decisions.
+                    </p>
+                    <p className="font-semibold text-red-200">
+                      ⚠️ IMPORTANT: The creator (Siddhant Bhasin) assumes NO responsibility or liability for any decisions 
+                      made based on the content provided by this application. Use at your own discretion and risk.
+                    </p>
+                  </div>
+                </div>
+
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">1. Acceptance of Terms</h2>
                   <p>
@@ -74,12 +95,30 @@ export default function TermsPage() {
                 </section>
 
                 <section>
-                  <h2 className="text-2xl font-semibold text-white mb-4">5. Limitation of Liability</h2>
-                  <p>
-                    AstroCircle provides astrological insights for entertainment and guidance purposes. We do not guarantee 
-                    the accuracy of predictions or readings. Users should not make important life decisions based solely 
-                    on astrological guidance without consulting appropriate professionals.
-                  </p>
+                  <h2 className="text-2xl font-semibold text-white mb-4">5. Limitation of Liability & Disclaimer</h2>
+                  <div className="space-y-4">
+                    <p>
+                      AstroCircle provides astrological insights for entertainment and guidance purposes. We do not guarantee 
+                      the accuracy of predictions or readings. Users should not make important life decisions based solely 
+                      on astrological guidance without consulting appropriate professionals.
+                    </p>
+                    <div className="bg-red-500/20 border border-red-400/30 rounded-lg p-4">
+                      <p className="text-red-200 font-semibold">
+                        <strong>COMPLETE LIABILITY WAIVER:</strong> Siddhant Bhasin, the creator of this personal project, 
+                        shall NOT be held liable for any direct, indirect, incidental, special, consequential, or punitive 
+                        damages arising from your use of this service. This includes but is not limited to:
+                      </p>
+                      <ul className="list-disc pl-6 mt-2 text-red-200 space-y-1">
+                        <li>Financial losses from investment or business decisions</li>
+                        <li>Relationship or personal life consequences</li>
+                        <li>Medical or health-related decisions</li>
+                        <li>Any other life decisions influenced by this application</li>
+                      </ul>
+                      <p className="text-red-200 font-semibold mt-3">
+                        BY USING THIS SERVICE, YOU ACKNOWLEDGE THAT THIS IS A HOBBY PROJECT AND AGREE TO HOLD THE CREATOR HARMLESS.
+                      </p>
+                    </div>
+                  </div>
                 </section>
 
                 <section>

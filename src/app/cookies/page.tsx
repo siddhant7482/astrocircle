@@ -37,6 +37,25 @@ export default function CookiesPage() {
           <Card className="backdrop-blur-sm bg-white/10 border-white/20 mb-8">
             <CardContent className="p-8">
               <div className="space-y-8 text-gray-300">
+                {/* Personal Project Disclaimer */}
+                <div className="bg-yellow-500/20 border border-yellow-400/30 rounded-lg p-6 mb-8">
+                  <h2 className="text-yellow-300 font-bold text-xl mb-3 flex items-center gap-2">
+                    🎯 Personal Project Notice
+                  </h2>
+                  <div className="text-yellow-100 space-y-3">
+                    <p className="font-semibold">
+                      AstroCircle is a fun personal project created by Siddhant Bhasin for educational and entertainment purposes only.
+                    </p>
+                    <p>
+                      This is NOT a commercial service. Cookie usage is minimal and primarily for basic functionality. 
+                      The creator assumes no liability for any cookie-related issues or privacy concerns.
+                    </p>
+                    <p className="font-semibold text-red-200">
+                      ⚠️ This is a hobby project - use at your own discretion.
+                    </p>
+                  </div>
+                </div>
+
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">What Are Cookies?</h2>
                   <p>

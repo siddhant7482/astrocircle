@@ -62,51 +62,191 @@ export default function LandingPage() {
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
-        <header className="flex items-center justify-between p-6 lg:px-12">
-          <div className="flex items-center space-x-2">
-            <div className="text-2xl">🌟</div>
-            <h1 className="text-2xl font-bold text-white bg-gradient-to-r from-purple-200 to-blue-200 bg-clip-text text-transparent">
-              AstroCircle
-            </h1>
+        <header className="relative z-30 py-4 px-6 lg:px-12">
+          {/* Glassmorphism Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-2xl border-b border-white/20 shadow-2xl"></div>
+          
+          {/* Animated Background Orbs */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute -top-4 left-1/4 w-12 h-12 bg-purple-400/20 rounded-full blur-xl animate-pulse"></div>
+            <div className="absolute -top-2 right-1/3 w-8 h-8 bg-blue-400/25 rounded-full blur-lg animate-pulse delay-1000"></div>
+            <div className="absolute -bottom-4 left-1/2 w-10 h-10 bg-indigo-400/15 rounded-full blur-xl animate-pulse delay-2000"></div>
           </div>
-          <Button 
-            onClick={() => router.push('/login')}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-6 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            Get Started
-          </Button>
-        </header>
 
-        {/* Hero Section */}
-        <section className="text-center py-20 lg:py-32 px-6 lg:px-12">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Unlock Your
-              <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent"> Cosmic </span>
-              Destiny
-            </h2>
-            <p className="text-xl lg:text-2xl text-gray-300 mb-8 leading-relaxed">
-              Discover the ancient wisdom of Vedic astrology with AI-powered insights. 
-              Get personalized readings, career guidance, and cosmic predictions tailored just for you.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
+            {/* Enhanced Logo */}
+            <Link href="/" className="group flex items-center space-x-3 text-white hover:text-purple-200 transition-all duration-500 transform hover:scale-105">
+              <div className="relative">
+                <div className="text-3xl lg:text-4xl group-hover:animate-spin-slow transition-all duration-700">🌟</div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/30 to-blue-400/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-500 opacity-0 group-hover:opacity-100"></div>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-2xl lg:text-3xl font-black bg-gradient-to-r from-white via-purple-100 to-blue-100 bg-clip-text text-transparent">
+                  AstroCircle
+                </span>
+                <span className="text-xs text-purple-300 font-medium tracking-wider opacity-80">
+                  Cosmic Wisdom
+                </span>
+              </div>
+            </Link>
+            
+            {/* Enhanced Navigation Menu */}
+            <nav className="hidden lg:flex items-center space-x-12">
+              <Link href="/features" className="relative group px-4 py-2 text-gray-100 hover:text-white font-semibold transition-all duration-500 hover:scale-110">
+                <span className="relative z-10">Features</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100"></div>
+                <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                <div className="absolute -top-1 -left-1 w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
+              </Link>
+              <Link href="/about" className="relative group px-4 py-2 text-gray-100 hover:text-white font-semibold transition-all duration-500 hover:scale-110">
+                <span className="relative z-10">About</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100"></div>
+                <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
+              </Link>
+              <Link href="/contact" className="relative group px-4 py-2 text-gray-100 hover:text-white font-semibold transition-all duration-500 hover:scale-110">
+                <span className="relative z-10">Contact</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100"></div>
+                <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                <div className="absolute -top-1 left-1/2 w-2 h-2 bg-indigo-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
+              </Link>
+            </nav>
+
+            {/* Enhanced Action Buttons */}
+            <div className="flex items-center space-x-6">
               <Button 
-                size="lg"
-                onClick={() => router.push('/register')}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 text-lg"
+                variant="outline" 
+                onClick={() => router.push('/login')}
+                className="group relative border-2 border-white/40 text-white hover:text-purple-100 bg-white/5 hover:bg-white/15 backdrop-blur-xl px-6 py-3 rounded-2xl font-bold transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25"
               >
-                Start Your Journey 🚀
+                <span className="relative z-10 flex items-center gap-2">
+                  ✨ Sign In
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </Button>
               <Button 
-                size="lg"
-                variant="outline"
-                onClick={() => router.push('/login')}
-                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
+                onClick={() => router.push('/register')}
+                className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-500 hover:scale-110 border-2 border-purple-400/50 hover:border-purple-300/70"
               >
-                Already a Member?
+                <span className="relative z-10 flex items-center gap-2">
+                  🚀 Get Started
+                  <span className="group-hover:animate-bounce">⭐</span>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/30 to-blue-400/30 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-500"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
+                <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-pink-400 rounded-full animate-ping delay-500 opacity-60"></div>
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button (for future mobile implementation) */}
+            <div className="lg:hidden">
+              <Button
+                variant="ghost"
+                className="text-white p-2"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
               </Button>
             </div>
           </div>
+
+          {/* Bottom Glow Effect */}
+          <div className="absolute -bottom-px left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent"></div>
+        </header>
+
+        {/* Hero Section */}
+        <section className="relative text-center py-20 lg:py-32 px-6 lg:px-12 overflow-hidden">
+          {/* Hero Background Effects */}
+          <div className="absolute inset-0 pointer-events-none">
+            {/* Large pulsing orbs */}
+            <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-purple-400/20 rounded-full blur-2xl animate-pulse"></div>
+            <div className="absolute top-1/3 right-1/4 w-40 h-40 bg-blue-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+            <div className="absolute bottom-1/3 left-1/3 w-36 h-36 bg-indigo-400/20 rounded-full blur-2xl animate-pulse delay-2000"></div>
+            
+            {/* Shooting stars effect */}
+            <div className="absolute top-1/6 left-1/6 w-1 h-1 bg-white rounded-full animate-ping"></div>
+            <div className="absolute top-1/4 right-1/3 w-1 h-1 bg-purple-300 rounded-full animate-ping delay-500"></div>
+            <div className="absolute bottom-1/4 right-1/6 w-1 h-1 bg-blue-300 rounded-full animate-ping delay-1000"></div>
+            <div className="absolute top-3/4 left-1/5 w-1 h-1 bg-indigo-300 rounded-full animate-ping delay-1500"></div>
+          </div>
+
+          <div className="max-w-5xl mx-auto relative z-10">
+            {/* Animated cosmic symbols */}
+            <div className="absolute -top-8 left-1/4 text-4xl animate-float opacity-60">✨</div>
+            <div className="absolute -top-4 right-1/4 text-3xl animate-float-delayed opacity-50">🌙</div>
+            <div className="absolute top-8 left-1/6 text-2xl animate-float-slow opacity-40">⭐</div>
+            <div className="absolute top-12 right-1/6 text-3xl animate-float-fast opacity-60">🔮</div>
+            
+            {/* Main heading with enhanced effects */}
+            <div className="relative mb-8">
+              <h2 className="text-6xl lg:text-8xl font-black text-white mb-6 leading-tight relative">
+                <span className="relative inline-block">
+                  Unlock Your
+                  <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 blur-xl rounded-full animate-pulse"></div>
+                </span>
+                <br />
+                <span className="bg-gradient-to-r from-purple-200 via-blue-200 to-purple-300 bg-clip-text text-transparent animate-pulse relative inline-block">
+                  Cosmic Destiny
+                  <div className="absolute -inset-2 bg-gradient-to-r from-purple-400/30 to-blue-400/30 blur-lg rounded-full"></div>
+                </span>
+              </h2>
+              
+              {/* Magical sparkle effects around text */}
+              <div className="absolute top-0 left-1/4 w-2 h-2 bg-yellow-300 rounded-full animate-ping opacity-75"></div>
+              <div className="absolute top-1/4 right-1/3 w-1.5 h-1.5 bg-purple-300 rounded-full animate-ping delay-300 opacity-60"></div>
+              <div className="absolute bottom-1/4 left-1/3 w-1 h-1 bg-blue-300 rounded-full animate-ping delay-700 opacity-80"></div>
+              <div className="absolute bottom-0 right-1/4 w-2 h-2 bg-indigo-300 rounded-full animate-ping delay-1000 opacity-50"></div>
+            </div>
+            
+            {/* Enhanced description with glow effect */}
+            <div className="relative mb-12">
+              <p className="text-xl lg:text-2xl text-gray-200 mb-4 leading-relaxed max-w-4xl mx-auto relative">
+                <span className="bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-medium">
+                  Discover the ancient wisdom of Vedic astrology with AI-powered insights.
+                </span>
+              </p>
+              <p className="text-lg lg:text-xl text-purple-200 leading-relaxed max-w-3xl mx-auto">
+                Get personalized readings, career guidance, and cosmic predictions tailored just for you.
+              </p>
+              
+              {/* Subtle glow behind text */}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 blur-3xl rounded-full"></div>
+            </div>
+            
+            {/* Enhanced CTA buttons with better visibility */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <Button 
+                size="lg"
+                onClick={() => router.push('/register')}
+                className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-bold px-10 py-5 rounded-full shadow-2xl hover:shadow-purple-500/25 transform hover:scale-110 transition-all duration-500 text-xl border-2 border-purple-400/30 hover:border-purple-300/50"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Start Your Journey 
+                  <span className="text-2xl group-hover:animate-bounce">🚀</span>
+                </span>
+                {/* Button glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+              </Button>
+              
+              <Button 
+                size="lg"
+                onClick={() => router.push('/login')}
+                className="group relative bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-10 py-5 rounded-full border-2 border-white/40 hover:border-white/60 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-xl"
+              >
+                <span className="relative z-10 bg-gradient-to-r from-white to-purple-100 bg-clip-text text-transparent font-semibold">
+                  Already a Member?
+                </span>
+                {/* Button backdrop glow */}
+                <div className="absolute inset-0 bg-white/5 rounded-full blur-lg group-hover:bg-white/10 transition-all duration-300"></div>
+              </Button>
+            </div>
+          </div>
+          
+          {/* Additional floating cosmic elements */}
+          <div className="absolute bottom-10 left-10 text-6xl opacity-20 animate-float-slow">🌌</div>
+          <div className="absolute top-20 right-10 text-5xl opacity-15 animate-float">🪐</div>
+          <div className="absolute bottom-20 right-20 text-4xl opacity-25 animate-float-delayed">🌟</div>
         </section>
 
         {/* Vedic Science Section */}
@@ -334,52 +474,59 @@ export default function LandingPage() {
         </section>
 
         {/* Footer */}
-        <footer className="py-12 px-6 lg:px-12 border-t border-white/20">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div>
+        <footer className="relative z-10 mt-20 py-12 px-6 lg:px-12 border-t border-white/10">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-8 mb-8">
+              {/* Brand */}
+              <div className="md:col-span-1">
                 <div className="flex items-center space-x-2 mb-4">
                   <div className="text-2xl">🌟</div>
-                  <h3 className="text-xl font-bold text-white">AstroCircle</h3>
+                  <span className="text-xl font-bold text-white">AstroCircle</span>
                 </div>
-                <p className="text-gray-400">
-                  Your gateway to cosmic wisdom and personal transformation through Vedic astrology.
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Unlock your cosmic destiny with AI-powered Vedic astrology insights.
                 </p>
               </div>
-              
+
+              {/* Navigation */}
+              <div>
+                <h4 className="text-white font-semibold mb-4">Navigation</h4>
+                <ul className="space-y-2 text-sm">
+                  <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
+                  <li><Link href="/features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
+                  <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
+                  <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
+                </ul>
+              </div>
+
+              {/* Services */}
               <div>
                 <h4 className="text-white font-semibold mb-4">Services</h4>
-                <ul className="space-y-2 text-gray-400">
-                  <li>Birth Chart Analysis</li>
-                  <li>Career Guidance</li>
-                  <li>Love Compatibility</li>
-                  <li>Health Insights</li>
+                <ul className="space-y-2 text-sm">
+                  <li><Link href="/dashboard" className="text-gray-400 hover:text-white transition-colors">Birth Chart</Link></li>
+                  <li><Link href="/career" className="text-gray-400 hover:text-white transition-colors">Career</Link></li>
+                  <li><Link href="/relationships" className="text-gray-400 hover:text-white transition-colors">Relationships</Link></li>
+                  <li><Link href="/health" className="text-gray-400 hover:text-white transition-colors">Health</Link></li>
                 </ul>
               </div>
-              
-              <div>
-                <h4 className="text-white font-semibold mb-4">Resources</h4>
-                <ul className="space-y-2 text-gray-400">
-                  <li>Daily Horoscope</li>
-                  <li>Vedic Calendar</li>
-                  <li>Astrology Blog</li>
-                  <li>Learning Center</li>
-                </ul>
-              </div>
-              
+
+              {/* Legal */}
               <div>
                 <h4 className="text-white font-semibold mb-4">Legal</h4>
-                <ul className="space-y-2 text-gray-400">
-                  <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-                  <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                  <li><Link href="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link></li>
-                  <li><Link href="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link></li>
+                <ul className="space-y-2 text-sm">
+                  <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+                  <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+                  <li><Link href="/disclaimer" className="text-gray-400 hover:text-white transition-colors">Disclaimer</Link></li>
+                  <li><Link href="/cookies" className="text-gray-400 hover:text-white transition-colors">Cookie Policy</Link></li>
                 </ul>
               </div>
             </div>
-            
-            <div className="border-t border-white/20 mt-8 pt-8 text-center text-gray-400">
-              <p>&copy; 2024 AstroCircle. All rights reserved. | Unlock your cosmic potential with ancient wisdom.</p>
+
+            {/* Bottom */}
+            <div className="pt-8 border-t border-white/10 text-center">
+              <p className="text-gray-400 text-sm">
+                © 2024 Siddhant Bhasin Production. All rights reserved.
+              </p>
             </div>
           </div>
         </footer>
