@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Loader2, Plus, Star, User, Sun, Moon, Sparkles } from 'lucide-react'
 import { getUserProfile, UserProfile } from '@/lib/supabase/queries'
-import { secureStorage } from '@/lib/encryption'
+import { secureStorage, clearLegacyHoroscopeData } from '@/lib/encryption'
 
 interface DailyHoroscope {
   date: string
@@ -31,6 +31,11 @@ export default function Dashboard() {
       setIsRedirecting(false)
     }
   }, [isAuthenticated, isRedirecting, setIsRedirecting])
+
+  // Clear legacy unencrypted data on first load
+  useEffect(() => {
+    clearLegacyHoroscopeData()
+  }, [])
 
   useEffect(() => {
     const fetchUserProfile = async () => {
