@@ -7,7 +7,6 @@ import { useState } from "react";
 import { SmoothLink } from "@/components/SmoothLink";
 import { SmoothButton } from "@/components/SmoothButton";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Menu, X } from "lucide-react";
 
 // Mobile Navigation Component
 function MobileNav() {
