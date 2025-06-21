@@ -24,30 +24,9 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     }
   }, [isAuthenticated, isLoading, isProtectedPage, router]);
 
-  useEffect(() => {
-    if (showDashboard) {
-      // More aggressive override of body and html background
-      document.body.style.background = 'transparent !important';
-      document.body.style.backgroundColor = 'transparent !important';
-      document.documentElement.style.background = 'linear-gradient(to bottom right, rgb(88, 28, 135), rgb(30, 58, 138), rgb(67, 56, 202)) !important';
-      
-      const handleMouseMove = (e: MouseEvent) => {
-        setMousePosition({ x: e.clientX, y: e.clientY })
-      }
-
-      window.addEventListener('mousemove', handleMouseMove)
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove)
-        // Reset backgrounds when leaving dashboard
-        document.body.style.background = '';
-        document.body.style.backgroundColor = '';
-        document.documentElement.style.background = '';
-      }
-    }
-  }, [showDashboard])
-
-  // Show loading state for protected pages when checking auth
-  if (isLoading && isProtectedPage) {
+  // Critical: Show loading for ALL protected pages when auth is still being checked
+  // This prevents blank screens during authentication verification
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
         {/* Background Effects */}
@@ -115,6 +94,30 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
+
+  useEffect(() => {
+    if (showDashboard) {
+      // More aggressive override of body and html background
+      document.body.style.background = 'transparent !important';
+      document.body.style.backgroundColor = 'transparent !important';
+      document.documentElement.style.background = 'linear-gradient(to bottom right, rgb(88, 28, 135), rgb(30, 58, 138), rgb(67, 56, 202)) !important';
+      
+      const handleMouseMove = (e: MouseEvent) => {
+        setMousePosition({ x: e.clientX, y: e.clientY })
+      }
+
+      window.addEventListener('mousemove', handleMouseMove)
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove)
+        // Reset backgrounds when leaving dashboard
+        document.body.style.background = '';
+        document.body.style.backgroundColor = '';
+        document.documentElement.style.background = '';
+      }
+    }
+  }, [showDashboard])
+
+
 
   // For auth pages or when not authenticated, just return the children without dashboard layout
   if (!showDashboard) {

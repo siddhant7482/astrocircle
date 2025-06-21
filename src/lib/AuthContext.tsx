@@ -31,17 +31,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     checkSession()
     
-    // Failsafe: stop loading after 5 seconds (but don't log out if already authenticated)
+    // Failsafe: stop loading after 8 seconds to handle slow network connections
     const timeout = setTimeout(() => {
-      setIsLoading(false)
-      // Don't log out if user is already authenticated
-    }, 5000)
+      if (isLoading) {
+        console.warn('Authentication check timed out - setting loading to false')
+        setIsLoading(false)
+      }
+    }, 8000)
     
     return () => clearTimeout(timeout)
   }, [])
 
   const checkSession = async () => {
     try {
+      setIsLoading(true) // Ensure loading state is set
+      
       // First clear any legacy cookies to avoid conflicts
       await fetch('/api/auth/clear-legacy-cookies', {
         method: 'POST',
@@ -58,9 +62,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.ok && data.user) {
         setIsAuthenticated(true)
         setUser(data.user)
+        console.log('Authentication successful:', data.user.email)
       } else {
         setIsAuthenticated(false)
         setUser(null)
+        console.log('Not authenticated or no valid session')
       }
     } catch (error) {
       console.error('Session check error:', error)
