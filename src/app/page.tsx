@@ -3,10 +3,107 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/hooks/use-user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SmoothLink } from "@/components/SmoothLink";
 import { SmoothButton } from "@/components/SmoothButton";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Menu, X } from "lucide-react";
+
+// Mobile Navigation Component
+function MobileNav() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <button className="group relative p-2 text-white hover:text-purple-200 transition-all duration-300">
+          <div className="flex flex-col items-center justify-center w-8 h-8">
+            <div className="w-6 h-0.5 bg-current mb-1.5 transition-all duration-300 group-hover:bg-purple-200"></div>
+            <div className="w-6 h-0.5 bg-current mb-1.5 transition-all duration-300 group-hover:bg-purple-200"></div>
+            <div className="w-6 h-0.5 bg-current transition-all duration-300 group-hover:bg-purple-200"></div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+        </button>
+      </SheetTrigger>
+      
+      <SheetContent 
+        side="right" 
+        className="w-80 bg-gradient-to-br from-purple-900/95 via-blue-900/95 to-indigo-900/95 backdrop-blur-xl border-purple-500/20 [&>button]:text-white [&>button]:w-10 [&>button]:h-10 [&>button]:top-4 [&>button]:right-4 [&>button]:hover:bg-white/20 [&>button]:rounded-lg [&>button]:transition-all [&>button]:duration-300 [&>button>svg]:w-6 [&>button>svg]:h-6"
+      >
+        <SheetHeader className="text-left pb-4 pr-12">
+          <SheetTitle className="flex items-center gap-3 text-white text-xl font-bold">
+            <span className="text-2xl">🌟</span>
+            <span className="bg-gradient-to-r from-white via-purple-100 to-blue-100 bg-clip-text text-transparent">
+              AstroCircle
+            </span>
+          </SheetTitle>
+        </SheetHeader>
+        
+        <div className="flex flex-col gap-4 pt-4">
+          {/* Navigation Links */}
+          <div className="flex flex-col gap-1">
+            <SmoothLink 
+              href="/features" 
+              className="group flex items-center gap-2 p-2 text-white hover:text-purple-200 bg-white/5 hover:bg-white/10 rounded-md transition-all duration-300"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-sm group-hover:scale-110 transition-transform duration-300">✨</span>
+              <span className="text-xs font-medium">Features</span>
+            </SmoothLink>
+            
+            <SmoothLink 
+              href="/about" 
+              className="group flex items-center gap-2 p-2 text-white hover:text-purple-200 bg-white/5 hover:bg-white/10 rounded-md transition-all duration-300"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-sm group-hover:scale-110 transition-transform duration-300">🌙</span>
+              <span className="text-xs font-medium">About</span>
+            </SmoothLink>
+            
+            <SmoothLink 
+              href="/contact" 
+              className="group flex items-center gap-2 p-2 text-white hover:text-purple-200 bg-white/5 hover:bg-white/10 rounded-md transition-all duration-300"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-sm group-hover:scale-110 transition-transform duration-300">📞</span>
+              <span className="text-xs font-medium">Contact</span>
+            </SmoothLink>
+          </div>
+          
+          {/* Action Buttons */}
+          <div className="flex flex-col items-center gap-2 pt-3 border-t border-white/20">
+            <SmoothButton 
+              href="/register"
+              className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-medium px-6 py-2.5 rounded-md shadow-md hover:shadow-purple-500/20 transition-all duration-300 w-32"
+              onClick={() => setOpen(false)}
+            >
+              <span className="relative z-10 flex items-center justify-center gap-1 text-xs">
+                🚀 Get Started
+                <span className="group-hover:animate-bounce text-xs">⭐</span>
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/15 to-blue-400/15 rounded-md blur-sm group-hover:blur-md transition-all duration-300"></div>
+            </SmoothButton>
+            
+            <SmoothButton 
+              href="/login"
+              className="group relative bg-white/8 hover:bg-white/15 backdrop-blur-md text-white font-medium px-6 py-2.5 rounded-md border border-white/25 hover:border-white/40 transition-all duration-300 w-32"
+              onClick={() => setOpen(false)}
+            >
+              <span className="relative z-10 text-xs bg-gradient-to-r from-white to-purple-100 bg-clip-text text-transparent">
+                Sign In
+              </span>
+            </SmoothButton>
+          </div>
+        </div>
+        
+        {/* Decorative Elements */}
+        <div className="absolute top-20 right-8 w-16 h-16 bg-purple-500/20 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute bottom-32 left-8 w-12 h-12 bg-blue-500/20 rounded-full blur-lg animate-pulse delay-1000"></div>
+      </SheetContent>
+    </Sheet>
+  );
+}
 
 export default function LandingPage() {
   const router = useRouter();
@@ -117,8 +214,8 @@ export default function LandingPage() {
               </nav>
             </div>
 
-            {/* Enhanced Action Buttons - Right section */}
-                        <div className="flex-1 flex justify-end max-w-xs">
+            {/* Enhanced Action Buttons - Right section - Desktop Only */}
+            <div className="flex-1 hidden lg:flex justify-end max-w-xs">
               <div className="flex items-center">
                 <SmoothButton 
                   href="/register"
@@ -135,15 +232,10 @@ export default function LandingPage() {
               </div>
             </div>
 
-                      {/* Mobile Navigation */}
-          <div className="lg:hidden flex items-center space-x-2">
-            <SmoothButton 
-              href="/register"
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-4 py-2 rounded-full text-sm"
-            >
-              🚀 Start
-            </SmoothButton>
-          </div>
+            {/* Mobile Navigation */}
+            <div className="flex-1 lg:hidden flex justify-end">
+              <MobileNav />
+            </div>
           </div>
 
           {/* Bottom Glow Effect */}
@@ -376,71 +468,71 @@ export default function LandingPage() {
         </section>
 
         {/* What We Exactly Do Section */}
-        <section className="py-20 px-6 lg:px-12">
+        <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h3 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+            <div className="text-center mb-8 sm:mb-12 md:mb-16">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
                 How We Transform 
                 <span className="bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent"> Your Life</span>
               </h3>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
                 We don&apos;t just tell your future - we empower you to create it
               </p>
             </div>
             
-            <div className="space-y-12">
-              <div className="flex flex-col lg:flex-row items-center gap-12">
-                <div className="lg:w-1/2">
-                  <h4 className="text-3xl font-bold text-white mb-4">📊 Precision Cosmic Analysis</h4>
-                  <p className="text-gray-300 text-lg leading-relaxed">
+            <div className="space-y-8 sm:space-y-10 md:space-y-12">
+              <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8 md:gap-12">
+                <div className="lg:w-1/2 px-4">
+                  <h4 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 sm:mb-4">📊 Precision Cosmic Analysis</h4>
+                  <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed">
                     We calculate your exact planetary positions down to the minute, analyzing over 27 stellar constellations, 
                     9 planets, and 12 houses to create your unique cosmic fingerprint. No generic horoscopes - just pure, 
                     personalized astrological science.
                   </p>
                 </div>
                 <div className="lg:w-1/2">
-                  <Card className="backdrop-blur-sm bg-gradient-to-br from-purple-500/20 to-blue-500/20 border-white/20 p-8">
+                  <Card className="backdrop-blur-sm bg-gradient-to-br from-purple-500/20 to-blue-500/20 border-white/20 p-4 sm:p-6 md:p-8">
                     <div className="text-center">
-                      <div className="text-6xl mb-4">🌌</div>
-                      <h5 className="text-xl font-semibold text-white">Your Cosmic DNA</h5>
+                      <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">🌌</div>
+                      <h5 className="text-lg sm:text-xl font-semibold text-white">Your Cosmic DNA</h5>
                     </div>
                   </Card>
                 </div>
               </div>
               
-              <div className="flex flex-col lg:flex-row-reverse items-center gap-12">
-                <div className="lg:w-1/2">
-                  <h4 className="text-3xl font-bold text-white mb-4">🎯 Life-Changing Predictions</h4>
-                  <p className="text-gray-300 text-lg leading-relaxed">
+              <div className="flex flex-col lg:flex-row-reverse items-center gap-6 sm:gap-8 md:gap-12">
+                <div className="lg:w-1/2 px-4">
+                  <h4 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 sm:mb-4">🎯 Life-Changing Predictions</h4>
+                  <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed">
                     We don&apos;t just predict what might happen - we show you exactly WHEN to make major life decisions. 
                     Should you start that business in March? Is September perfect for love? We give you the cosmic timing 
                     that billionaires and celebrities use.
                   </p>
                 </div>
                 <div className="lg:w-1/2">
-                  <Card className="backdrop-blur-sm bg-gradient-to-br from-green-500/20 to-purple-500/20 border-white/20 p-8">
+                  <Card className="backdrop-blur-sm bg-gradient-to-br from-green-500/20 to-purple-500/20 border-white/20 p-4 sm:p-6 md:p-8">
                     <div className="text-center">
-                      <div className="text-6xl mb-4">⏰</div>
-                      <h5 className="text-xl font-semibold text-white">Perfect Timing</h5>
+                      <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">⏰</div>
+                      <h5 className="text-lg sm:text-xl font-semibold text-white">Perfect Timing</h5>
                     </div>
                   </Card>
                 </div>
               </div>
               
-              <div className="flex flex-col lg:flex-row items-center gap-12">
-                <div className="lg:w-1/2">
-                  <h4 className="text-3xl font-bold text-white mb-4">🚀 Instant Transformation</h4>
-                  <p className="text-gray-300 text-lg leading-relaxed">
+              <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8 md:gap-12">
+                <div className="lg:w-1/2 px-4">
+                  <h4 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 sm:mb-4">🚀 Instant Transformation</h4>
+                  <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed">
                     Get immediate access to powerful Vedic remedies, mantras, and gemstone recommendations that can 
                     shift your energy instantly. See results in days, not years. Our users report life changes within 
                     the first week of following their cosmic guidance.
                   </p>
                 </div>
                 <div className="lg:w-1/2">
-                  <Card className="backdrop-blur-sm bg-gradient-to-br from-orange-500/20 to-pink-500/20 border-white/20 p-8">
+                  <Card className="backdrop-blur-sm bg-gradient-to-br from-orange-500/20 to-pink-500/20 border-white/20 p-4 sm:p-6 md:p-8">
                     <div className="text-center">
-                      <div className="text-6xl mb-4">⚡</div>
-                      <h5 className="text-xl font-semibold text-white">Instant Results</h5>
+                      <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">⚡</div>
+                      <h5 className="text-lg sm:text-xl font-semibold text-white">Instant Results</h5>
                     </div>
                   </Card>
                 </div>
@@ -450,18 +542,18 @@ export default function LandingPage() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-6 lg:px-12 text-center">
+        <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12 text-center">
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
               Ready to Change Your Life?
             </h3>
-            <p className="text-xl text-gray-300 mb-8">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-12 md:mb-16 px-4 max-w-3xl mx-auto">
               Join thousands who&apos;ve already unlocked their cosmic potential
             </p>
             <SmoothButton 
               href="/register"
               size="lg"
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-12 py-6 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 text-xl"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 text-base sm:text-lg md:text-xl w-full sm:w-auto"
             >
               Get Your Free Reading Now ✨
             </SmoothButton>
@@ -469,24 +561,24 @@ export default function LandingPage() {
         </section>
 
         {/* Footer */}
-        <footer className="relative z-10 mt-20 py-12 px-6 lg:px-12 border-t border-white/10">
+        <footer className="relative z-10 mt-12 sm:mt-16 md:mt-20 py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-12 border-t border-white/10">
           <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
               {/* Brand */}
-              <div className="md:col-span-1">
-                <div className="flex items-center space-x-2 mb-4">
-                  <div className="text-2xl">🌟</div>
-                  <span className="text-xl font-bold text-white">AstroCircle</span>
+              <div className="sm:col-span-2 md:col-span-1">
+                <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+                  <div className="text-xl sm:text-2xl">🌟</div>
+                  <span className="text-lg sm:text-xl font-bold text-white">AstroCircle</span>
                 </div>
-                <p className="text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
                   Unlock your cosmic destiny with AI-powered Vedic astrology insights.
                 </p>
               </div>
 
               {/* Navigation */}
               <div>
-                <h4 className="text-white font-semibold mb-4">Navigation</h4>
-                <ul className="space-y-2 text-sm">
+                <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Navigation</h4>
+                <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
                   <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
                   <li><Link href="/features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
                   <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
@@ -496,8 +588,8 @@ export default function LandingPage() {
 
               {/* Services */}
               <div>
-                <h4 className="text-white font-semibold mb-4">Services</h4>
-                <ul className="space-y-2 text-sm">
+                <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Services</h4>
+                <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
                   <li><Link href="/dashboard" className="text-gray-400 hover:text-white transition-colors">Birth Chart</Link></li>
                   <li><Link href="/career" className="text-gray-400 hover:text-white transition-colors">Career</Link></li>
                   <li><Link href="/relationships" className="text-gray-400 hover:text-white transition-colors">Relationships</Link></li>
@@ -507,8 +599,8 @@ export default function LandingPage() {
 
               {/* Legal */}
               <div>
-                <h4 className="text-white font-semibold mb-4">Legal</h4>
-                <ul className="space-y-2 text-sm">
+                <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Legal</h4>
+                <ul className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
                   <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
                   <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
                   <li><Link href="/disclaimer" className="text-gray-400 hover:text-white transition-colors">Disclaimer</Link></li>
@@ -518,8 +610,8 @@ export default function LandingPage() {
             </div>
 
             {/* Bottom */}
-            <div className="pt-8 border-t border-white/10 text-center">
-              <p className="text-gray-400 text-sm">
+            <div className="pt-6 sm:pt-8 border-t border-white/10 text-center">
+              <p className="text-gray-400 text-xs sm:text-sm">
                 © 2024 Siddhant Bhasin Production. All rights reserved.
               </p>
             </div>

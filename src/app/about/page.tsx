@@ -4,8 +4,106 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { SmoothLink } from "@/components/SmoothLink";
 import { SmoothButton } from "@/components/SmoothButton";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Menu, X } from "lucide-react";
+
+// Mobile Navigation Component
+function MobileNav() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <button className="group relative p-2 text-white hover:text-purple-200 transition-all duration-300">
+          <div className="flex flex-col items-center justify-center w-8 h-8">
+            <div className="w-6 h-0.5 bg-current mb-1.5 transition-all duration-300 group-hover:bg-purple-200"></div>
+            <div className="w-6 h-0.5 bg-current mb-1.5 transition-all duration-300 group-hover:bg-purple-200"></div>
+            <div className="w-6 h-0.5 bg-current transition-all duration-300 group-hover:bg-purple-200"></div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+        </button>
+      </SheetTrigger>
+      
+      <SheetContent 
+        side="right" 
+        className="w-80 bg-gradient-to-br from-purple-900/95 via-blue-900/95 to-indigo-900/95 backdrop-blur-xl border-purple-500/20 [&>button]:text-white [&>button]:w-10 [&>button]:h-10 [&>button]:top-4 [&>button]:right-4 [&>button]:hover:bg-white/20 [&>button]:rounded-lg [&>button]:transition-all [&>button]:duration-300 [&>button>svg]:w-6 [&>button>svg]:h-6"
+      >
+        <SheetHeader className="text-left pb-4 pr-12">
+          <SheetTitle className="flex items-center gap-3 text-white text-xl font-bold">
+            <span className="text-2xl">🌟</span>
+            <span className="bg-gradient-to-r from-white via-purple-100 to-blue-100 bg-clip-text text-transparent">
+              AstroCircle
+            </span>
+          </SheetTitle>
+        </SheetHeader>
+        
+        <div className="flex flex-col gap-4 pt-4">
+          {/* Navigation Links */}
+          <div className="flex flex-col gap-1">
+            <SmoothLink 
+              href="/features" 
+              className="group flex items-center gap-2 p-2 text-white hover:text-purple-200 bg-white/5 hover:bg-white/10 rounded-md transition-all duration-300"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-sm group-hover:scale-110 transition-transform duration-300">✨</span>
+              <span className="text-xs font-medium">Features</span>
+            </SmoothLink>
+            
+            <SmoothLink 
+              href="/about" 
+              className="group flex items-center gap-2 p-2 text-white hover:text-purple-200 bg-white/5 hover:bg-white/10 rounded-md transition-all duration-300"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-sm group-hover:scale-110 transition-transform duration-300">🌙</span>
+              <span className="text-xs font-medium">About</span>
+            </SmoothLink>
+            
+            <SmoothLink 
+              href="/contact" 
+              className="group flex items-center gap-2 p-2 text-white hover:text-purple-200 bg-white/5 hover:bg-white/10 rounded-md transition-all duration-300"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-sm group-hover:scale-110 transition-transform duration-300">📞</span>
+              <span className="text-xs font-medium">Contact</span>
+            </SmoothLink>
+          </div>
+          
+          {/* Action Buttons */}
+          <div className="flex flex-col items-center gap-2 pt-3 border-t border-white/20">
+            <SmoothButton 
+              href="/register"
+              className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-medium px-6 py-2.5 rounded-md shadow-md hover:shadow-purple-500/20 transition-all duration-300 w-32"
+              onClick={() => setOpen(false)}
+            >
+              <span className="relative z-10 flex items-center justify-center gap-1 text-xs">
+                🚀 Get Started
+                <span className="group-hover:animate-bounce text-xs">⭐</span>
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/15 to-blue-400/15 rounded-md blur-sm group-hover:blur-md transition-all duration-300"></div>
+            </SmoothButton>
+            
+            <SmoothButton 
+              href="/login"
+              className="group relative bg-white/8 hover:bg-white/15 backdrop-blur-md text-white font-medium px-6 py-2.5 rounded-md border border-white/25 hover:border-white/40 transition-all duration-300 w-32"
+              onClick={() => setOpen(false)}
+            >
+              <span className="relative z-10 text-xs bg-gradient-to-r from-white to-purple-100 bg-clip-text text-transparent">
+                Sign In
+              </span>
+            </SmoothButton>
+          </div>
+        </div>
+        
+        {/* Decorative Elements */}
+        <div className="absolute top-20 right-8 w-16 h-16 bg-purple-500/20 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute bottom-32 left-8 w-12 h-12 bg-blue-500/20 rounded-full blur-lg animate-pulse delay-1000"></div>
+      </SheetContent>
+    </Sheet>
+  );
+}
 
 export default function AboutPage() {
   const router = useRouter();
@@ -82,8 +180,8 @@ export default function AboutPage() {
             </nav>
           </div>
 
-          {/* Enhanced Action Buttons - Right section */}
-          <div className="flex-1 flex justify-end max-w-xs">
+          {/* Enhanced Action Buttons - Right section - Desktop Only */}
+          <div className="flex-1 hidden lg:flex justify-end max-w-xs">
             <div className="flex items-center">
               <SmoothButton 
                 href="/register"
@@ -101,13 +199,8 @@ export default function AboutPage() {
           </div>
 
           {/* Mobile Navigation */}
-          <div className="lg:hidden flex items-center space-x-2">
-            <SmoothButton 
-              href="/register"
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-4 py-2 rounded-full text-sm"
-            >
-              🚀 Start
-            </SmoothButton>
+          <div className="flex-1 lg:hidden flex justify-end">
+            <MobileNav />
           </div>
         </div>
 
@@ -116,11 +209,11 @@ export default function AboutPage() {
       </header>
 
       {/* Content */}
-      <div className="relative z-10 py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-12">
+      <div className="relative z-10 py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
         <div className="max-w-6xl mx-auto">
           {/* Page Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
               About <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">AstroCircle</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
@@ -131,7 +224,7 @@ export default function AboutPage() {
           {/* Mission Statement */}
           <div className="mb-8 sm:mb-12 md:mb-16">
             <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-4 sm:p-6 md:p-8 lg:p-12 text-center">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
                 Our <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Mission</span>
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
@@ -145,10 +238,10 @@ export default function AboutPage() {
           {/* Story Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 mb-8 sm:mb-12 md:mb-16">
             <div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6 px-4 lg:px-0">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 px-4 lg:px-0">
                 The <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Story</span>
               </h2>
-              <div className="space-y-4 sm:space-y-6 text-gray-300 text-base sm:text-lg leading-relaxed px-4 lg:px-0">
+              <div className="space-y-4 sm:space-y-6 text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed px-4 lg:px-0">
                 <p>
                   AstroCircle was born from a passion for making the profound wisdom of Vedic astrology accessible 
                   to everyone in our modern digital age. For over 5,000 years, this ancient science has guided 
@@ -168,34 +261,34 @@ export default function AboutPage() {
             </div>
 
             <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-4 sm:p-6 md:p-8">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">Why AstroCircle?</h3>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-6 text-center">Why AstroCircle?</h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
-                  <div className="text-2xl">🔮</div>
+                  <div className="text-4xl sm:text-5xl md:text-6xl">🔮</div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">Ancient Wisdom</h4>
-                    <p className="text-gray-300 text-sm">Rooted in 5,000+ years of Vedic tradition</p>
+                    <h4 className="text-white font-semibold mb-1 text-sm sm:text-base md:text-lg">Ancient Wisdom</h4>
+                    <p className="text-gray-300 text-xs sm:text-sm md:text-base">Rooted in 5,000+ years of Vedic tradition</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="text-2xl">🤖</div>
+                  <div className="text-4xl sm:text-5xl md:text-6xl">🤖</div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">Modern Technology</h4>
-                    <p className="text-gray-300 text-sm">AI-powered analysis for precise insights</p>
+                    <h4 className="text-white font-semibold mb-1 text-sm sm:text-base md:text-lg">Modern Technology</h4>
+                    <p className="text-gray-300 text-xs sm:text-sm md:text-base">AI-powered analysis for precise insights</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="text-2xl">🎯</div>
+                  <div className="text-4xl sm:text-5xl md:text-6xl">🎯</div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">Personalized</h4>
-                    <p className="text-gray-300 text-sm">Tailored specifically to your birth chart</p>
+                    <h4 className="text-white font-semibold mb-1 text-sm sm:text-base md:text-lg">Personalized</h4>
+                    <p className="text-gray-300 text-xs sm:text-sm md:text-base">Tailored specifically to your birth chart</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="text-2xl">🌍</div>
+                  <div className="text-4xl sm:text-5xl md:text-6xl">🌍</div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">Accessible</h4>
-                    <p className="text-gray-300 text-sm">Available 24/7 from anywhere in the world</p>
+                    <h4 className="text-white font-semibold mb-1 text-sm sm:text-base md:text-lg">Accessible</h4>
+                    <p className="text-gray-300 text-xs sm:text-sm md:text-base">Available 24/7 from anywhere in the world</p>
                   </div>
                 </div>
               </div>
@@ -203,31 +296,31 @@ export default function AboutPage() {
           </div>
 
           {/* Values Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white text-center mb-12">
+          <div className="mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-8 sm:mb-10 md:mb-12">
               Our <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Values</span>
             </h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
               <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-6 text-center hover:bg-white/15 transition-all duration-300">
-                <div className="text-4xl mb-4">🙏</div>
-                <h3 className="text-xl font-semibold text-white mb-3">Authenticity</h3>
-                <p className="text-gray-300">
+                <div className="text-4xl sm:text-5xl md:text-6xl mb-4">🙏</div>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-3">Authenticity</h3>
+                <p className="text-sm sm:text-base md:text-lg text-gray-300">
                   We honor the sacred traditions of Vedic astrology while making them accessible to modern seekers.
                 </p>
               </Card>
 
               <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-6 text-center hover:bg-white/15 transition-all duration-300">
-                <div className="text-4xl mb-4">💡</div>
-                <h3 className="text-xl font-semibold text-white mb-3">Innovation</h3>
-                <p className="text-gray-300">
+                <div className="text-4xl sm:text-5xl md:text-6xl mb-4">💡</div>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-3">Innovation</h3>
+                <p className="text-sm sm:text-base md:text-lg text-gray-300">
                   We continuously evolve our technology to provide the most accurate and helpful insights possible.
                 </p>
               </Card>
 
               <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-6 text-center hover:bg-white/15 transition-all duration-300">
-                <div className="text-4xl mb-4">🤝</div>
-                <h3 className="text-xl font-semibold text-white mb-3">Empowerment</h3>
-                <p className="text-gray-300">
+                <div className="text-4xl sm:text-5xl md:text-6xl mb-4">🤝</div>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-3">Empowerment</h3>
+                <p className="text-sm sm:text-base md:text-lg text-gray-300">
                   We believe everyone deserves access to cosmic wisdom to make informed life decisions.
                 </p>
               </Card>
@@ -235,16 +328,16 @@ export default function AboutPage() {
           </div>
 
           {/* Team Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white text-center mb-12">
+          <div className="mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-8 sm:mb-10 md:mb-12">
               Meet the <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Creator</span>
             </h2>
             <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-8 lg:p-12">
               <div className="text-center">
                 <div className="text-6xl mb-6">👨‍💻</div>
-                <h3 className="text-2xl font-bold text-white mb-4">Siddhant Bhasin</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4">Siddhant Bhasin</h3>
                 <p className="text-purple-300 font-semibold mb-6">Founder & Creator</p>
-                <p className="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto">
+                <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
                   A passionate developer and spiritual seeker who believes in the power of technology to preserve 
                   and share ancient wisdom. Siddhant created AstroCircle as a personal project to explore the 
                   fascinating intersection of AI and astrology, making cosmic insights accessible to everyone.
@@ -255,17 +348,17 @@ export default function AboutPage() {
 
           {/* CTA Section */}
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
               Ready to Begin Your <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Cosmic Journey?</span>
             </h2>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-12 md:mb-16 max-w-2xl mx-auto">
               Join our community of cosmic explorers and discover what the stars have in store for you.
             </p>
             <div className="flex justify-center">
               <Button 
                 size="lg"
                 onClick={() => router.push('/register')}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 text-base sm:text-lg md:text-xl"
               >
                 Get Started 🚀
               </Button>
@@ -275,24 +368,24 @@ export default function AboutPage() {
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 mt-20 py-12 px-6 lg:px-12 border-t border-white/10">
+      <footer className="relative z-10 mt-20 py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12 border-t border-white/10">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* Brand */}
             <div className="md:col-span-1">
               <div className="flex items-center space-x-2 mb-4">
                 <div className="text-2xl">🌟</div>
-                <span className="text-xl font-bold text-white">AstroCircle</span>
+                <span className="text-sm sm:text-base font-bold text-white">AstroCircle</span>
               </div>
-              <p className="text-gray-400 text-sm leading-relaxed">
+              <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
                 Unlock your cosmic destiny with AI-powered Vedic astrology insights.
               </p>
             </div>
 
             {/* Navigation */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Navigation</h4>
-              <ul className="space-y-2 text-sm">
+              <h4 className="text-white text-sm sm:text-base font-semibold mb-4">Navigation</h4>
+              <ul className="space-y-2 text-xs sm:text-sm">
                 <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
                 <li><Link href="/features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
                 <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
@@ -302,8 +395,8 @@ export default function AboutPage() {
 
             {/* Services */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Services</h4>
-              <ul className="space-y-2 text-sm">
+              <h4 className="text-white text-sm sm:text-base font-semibold mb-4">Services</h4>
+              <ul className="space-y-2 text-xs sm:text-sm">
                 <li><Link href="/dashboard" className="text-gray-400 hover:text-white transition-colors">Birth Chart</Link></li>
                 <li><Link href="/career" className="text-gray-400 hover:text-white transition-colors">Career</Link></li>
                 <li><Link href="/relationships" className="text-gray-400 hover:text-white transition-colors">Relationships</Link></li>
@@ -313,8 +406,8 @@ export default function AboutPage() {
 
             {/* Legal */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm">
+              <h4 className="text-white text-sm sm:text-base font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2 text-xs sm:text-sm">
                 <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
                 <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
                 <li><Link href="/disclaimer" className="text-gray-400 hover:text-white transition-colors">Disclaimer</Link></li>
@@ -325,7 +418,7 @@ export default function AboutPage() {
 
           {/* Bottom */}
           <div className="pt-8 border-t border-white/10 text-center">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-xs sm:text-sm">
               © 2024 Siddhant Bhasin Production. All rights reserved.
             </p>
           </div>
