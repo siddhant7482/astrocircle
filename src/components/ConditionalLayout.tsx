@@ -47,6 +47,8 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     }
   }, [showDashboard]);
 
+
+
   // Critical: Show loading for ALL protected pages when auth is still being checked
   // This prevents blank screens during authentication verification
   if (isLoading) {
@@ -113,6 +115,18 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
             <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-100"></div>
             <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce delay-200"></div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle unauthenticated users on protected pages
+  if (!isLoading && !isAuthenticated && isProtectedPage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <div className="text-center">
+          <div className="text-white mb-4">Redirecting to login...</div>
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent mx-auto"></div>
         </div>
       </div>
     );
