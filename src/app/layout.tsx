@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
 import { ConditionalLayout } from "@/components/ConditionalLayout";
+import { NavigationProvider } from "@/components/NavigationProvider";
+import PageTransition from "@/components/PageTransition";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +22,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <AuthProvider>
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
+          <NavigationProvider>
+            <ConditionalLayout>
+              <PageTransition>
+                {children}
+              </PageTransition>
+            </ConditionalLayout>
+          </NavigationProvider>
         </AuthProvider>
       </body>
     </html>

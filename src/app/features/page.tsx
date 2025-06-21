@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { SmoothLink } from "@/components/SmoothLink";
 
 export default function FeaturesPage() {
   const router = useRouter();
@@ -37,9 +38,10 @@ export default function FeaturesPage() {
           <div className="absolute -bottom-4 left-1/2 w-10 h-10 bg-indigo-400/15 rounded-full blur-xl animate-pulse delay-2000"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
-          {/* Enhanced Logo */}
-          <Link href="/" className="group flex items-center space-x-3 text-white hover:text-purple-200 transition-all duration-500 transform hover:scale-105">
+        <div className="max-w-7xl mx-auto flex items-center relative z-10">
+          {/* Enhanced Logo - Left section */}
+          <div className="flex-1 flex justify-start max-w-xs">
+            <SmoothLink href="/" className="group flex items-center space-x-3 text-white hover:text-purple-200 transition-all duration-500 transform hover:scale-105">
             <div className="relative">
               <div className="text-3xl lg:text-4xl group-hover:animate-spin-slow transition-all duration-700">🌟</div>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-400/30 to-blue-400/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-500 opacity-0 group-hover:opacity-100"></div>
@@ -52,54 +54,49 @@ export default function FeaturesPage() {
                 Cosmic Wisdom
               </span>
             </div>
-          </Link>
+          </SmoothLink>
+          </div>
           
-          {/* Enhanced Navigation Menu */}
-          <nav className="hidden lg:flex items-center space-x-12">
-            <Link href="/features" className="relative group px-4 py-2 text-white font-semibold transition-all duration-500 hover:scale-110">
-              <span className="relative z-10">Features</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-full opacity-100 transition-all duration-500"></div>
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 transition-all duration-500 rounded-full"></div>
-              <div className="absolute -top-1 -left-1 w-2 h-2 bg-purple-400 rounded-full animate-ping"></div>
-            </Link>
-            <Link href="/about" className="relative group px-4 py-2 text-gray-100 hover:text-white font-semibold transition-all duration-500 hover:scale-110">
-              <span className="relative z-10">About</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100"></div>
-              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
-              <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
-            </Link>
-            <Link href="/contact" className="relative group px-4 py-2 text-gray-100 hover:text-white font-semibold transition-all duration-500 hover:scale-110">
-              <span className="relative z-10">Contact</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100"></div>
-              <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
-              <div className="absolute -top-1 left-1/2 w-2 h-2 bg-indigo-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
-            </Link>
-          </nav>
+          {/* Enhanced Navigation Menu - Center section */}
+          <div className="flex-1 flex justify-center">
+                        <nav className="hidden lg:flex items-center space-x-8">
+              <SmoothLink href="/features" className="relative group px-4 py-2 text-white font-semibold transition-all duration-500 hover:scale-110">
+                <span className="relative z-10">Features</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-full opacity-100 transition-all duration-500"></div>
+                <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 transition-all duration-500 rounded-full"></div>
+                <div className="absolute -top-1 -left-1 w-2 h-2 bg-purple-400 rounded-full animate-ping"></div>
+              </SmoothLink>
+              <SmoothLink href="/about" className="relative group px-4 py-2 text-gray-100 hover:text-white font-semibold transition-all duration-500 hover:scale-110">
+                <span className="relative z-10">About</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100"></div>
+                <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
+              </SmoothLink>
+              <SmoothLink href="/contact" className="relative group px-4 py-2 text-gray-100 hover:text-white font-semibold transition-all duration-500 hover:scale-110">
+                <span className="relative z-10">Contact</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100"></div>
+                <div className="absolute -bottom-2 left-0 w-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                <div className="absolute -top-1 left-1/2 w-2 h-2 bg-indigo-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
+              </SmoothLink>
+            </nav>
+          </div>
 
-          {/* Enhanced Action Buttons */}
-          <div className="flex items-center space-x-6">
-            <Button 
-              variant="outline" 
-              onClick={() => router.push('/login')}
-              className="group relative border-2 border-white/40 text-white hover:text-purple-100 bg-white/5 hover:bg-white/15 backdrop-blur-xl px-6 py-3 rounded-2xl font-bold transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                ✨ Sign In
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </Button>
-            <Button 
-              onClick={() => router.push('/register')}
-              className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-bold px-8 py-3 rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-500 hover:scale-110 border-2 border-purple-400/50 hover:border-purple-300/70"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                🚀 Get Started
-                <span className="group-hover:animate-bounce">⭐</span>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-400/30 to-blue-400/30 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-500"></div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
-              <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-pink-400 rounded-full animate-ping delay-500 opacity-60"></div>
-            </Button>
+          {/* Enhanced Action Buttons - Right section */}
+                    <div className="flex-1 flex justify-end max-w-xs">
+            <div className="flex items-center">
+              <Button 
+                onClick={() => router.push('/register')}
+                className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-bold px-6 py-2.5 rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-500 hover:scale-110 border-2 border-purple-400/50 hover:border-purple-300/70 text-sm lg:text-base"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  🚀 Get Started
+                  <span className="group-hover:animate-bounce">⭐</span>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/30 to-blue-400/30 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-500"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
+                <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-pink-400 rounded-full animate-ping delay-500 opacity-60"></div>
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Menu Button (for future mobile implementation) */}
