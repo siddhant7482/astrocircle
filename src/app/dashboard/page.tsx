@@ -65,12 +65,19 @@ export default function Dashboard() {
       const today = new Date()
       const dateString = today.toISOString().split('T')[0]
       
-      // Check if we already have today's horoscope
-      const existingHoroscope = localStorage.getItem(`horoscope_${dateString}_${userProfile.id}`)
-      if (existingHoroscope) {
-        setDailyHoroscope(JSON.parse(existingHoroscope))
-        setIsGeneratingHoroscope(false)
-        return
+      // Check if we already have today's horoscope in database
+      const existingResponse = await fetch(`/api/daily-horoscope?date=${dateString}`, {
+        method: 'GET',
+        credentials: 'include',
+      })
+      
+      if (existingResponse.ok) {
+        const existingData = await existingResponse.json()
+        if (existingData.horoscope) {
+          setDailyHoroscope(existingData.horoscope)
+          setIsGeneratingHoroscope(false)
+          return
+        }
       }
 
       // Call DeepSeek AI for daily horoscope
@@ -143,9 +150,30 @@ export default function Dashboard() {
         // API call failed, using fallback horoscope
       }
 
-      // Store in localStorage for today
-      localStorage.setItem(`horoscope_${dateString}_${userProfile.id}`, JSON.stringify(horoscopeData))
-      setDailyHoroscope(horoscopeData)
+      // Store securely in database
+      const saveResponse = await fetch('/api/daily-horoscope', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          date: dateString,
+          prediction: horoscopeData.prediction,
+          luckyNumber: horoscopeData.luckyNumber,
+          luckyColor: horoscopeData.luckyColor,
+          advice: horoscopeData.advice,
+          planetaryInfluence: horoscopeData.planetaryInfluence
+        }),
+      })
+
+      if (saveResponse.ok) {
+        const savedData = await saveResponse.json()
+        setDailyHoroscope(savedData.horoscope)
+      } else {
+        // Fallback to local state if save fails
+        setDailyHoroscope(horoscopeData)
+      }
 
     } catch (error) {
       console.error('Error generating horoscope:', error)
