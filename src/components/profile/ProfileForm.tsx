@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/AuthContext";
 import { getUserProfile, updateUserProfile } from "@/lib/supabase/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { User, Calendar, Clock, MapPin, Star, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
+import { User, Calendar, Clock, MapPin, Star, ArrowLeft, CheckCircle, AlertCircle, LogOut } from "lucide-react";
 
 interface ProfileFormProps {
   userId: string;
@@ -58,6 +59,7 @@ const AnimatedCard = ({ children, delay = 0 }: { children: React.ReactNode, dela
 
 export function ProfileForm({ userId, email }: ProfileFormProps) {
   const router = useRouter();
+  const { signOut } = useAuth();
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [birthTime, setBirthTime] = useState('');
@@ -357,6 +359,34 @@ export function ProfileForm({ userId, email }: ProfileFormProps) {
             </CardContent>
           </AnimatedCard>
         )}
+
+        {/* Account Actions Card */}
+        <AnimatedCard delay={300}>
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <User className="h-5 w-5 text-red-300" />
+              Account Actions
+            </CardTitle>
+            <CardDescription className="text-gray-300">
+              Manage your account settings
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                onClick={signOut}
+                variant="outline"
+                className="bg-red-500/10 hover:bg-red-500/20 text-red-300 border-red-500/30 hover:border-red-500/50 backdrop-blur-sm transition-all duration-200"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </Button>
+              <div className="flex-1 text-sm text-gray-400">
+                You will be redirected to the login page after signing out.
+              </div>
+            </div>
+          </CardContent>
+        </AnimatedCard>
       </div>
     </div>
   );
