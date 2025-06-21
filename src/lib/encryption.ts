@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js'
 
 const SECRET_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY || 'astrocircle-secret-key-2024'
 
-export function encryptData(data: any): string {
+export function encryptData(data: unknown): string {
   try {
     const jsonString = JSON.stringify(data)
     const encrypted = CryptoJS.AES.encrypt(jsonString, SECRET_KEY).toString()
@@ -16,7 +16,7 @@ export function encryptData(data: any): string {
   }
 }
 
-export function decryptData(encryptedData: string): any {
+export function decryptData(encryptedData: string): unknown {
   try {
     // Try to decrypt first
     const decrypted = CryptoJS.AES.decrypt(encryptedData, SECRET_KEY)
@@ -42,7 +42,7 @@ export function decryptData(encryptedData: string): any {
 
 // Secure localStorage wrapper
 export const secureStorage = {
-  setItem: (key: string, value: any) => {
+  setItem: (key: string, value: unknown) => {
     const encrypted = encryptData(value)
     localStorage.setItem(key, encrypted)
   },
