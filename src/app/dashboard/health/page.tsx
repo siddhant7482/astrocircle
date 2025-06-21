@@ -153,25 +153,19 @@ export default function Health() {
           // Check if we got health-specific response from DeepSeek
           if (apiResponse.healthStrengths && Array.isArray(apiResponse.healthStrengths)) {
             analysisData.healthStrengths = apiResponse.healthStrengths
-            // Using DeepSeek AI health strengths
           }
           
           if (apiResponse.explanation && typeof apiResponse.explanation === 'string') {
             analysisData.explanation = apiResponse.explanation
-            // Using DeepSeek AI health explanation
           }
           
           if (apiResponse.vulnerabilities && typeof apiResponse.vulnerabilities === 'string') {
             analysisData.vulnerabilities = apiResponse.vulnerabilities
-            // Using DeepSeek AI health vulnerabilities
           }
           
           if (apiResponse.remedies && Array.isArray(apiResponse.remedies)) {
             analysisData.remedies = apiResponse.remedies
-            // Using DeepSeek AI health remedies
           }
-          
-          // DeepSeek AI Response processed
         }
       } catch {
         // API call failed, using fallback health data
@@ -191,7 +185,7 @@ export default function Health() {
 
   if (loading || isRedirecting || isLoadingProfile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+      <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
           <p className="text-gray-300">
@@ -216,7 +210,7 @@ export default function Health() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="flex-1 p-6">
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent">
           Health & Wellness Analysis
@@ -427,4 +421,4 @@ export default function Health() {
       )}
     </div>
   )
-} 
+}

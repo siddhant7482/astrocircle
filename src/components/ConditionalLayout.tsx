@@ -214,9 +214,9 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
                   Relationships
                 </a>
                 <a 
-                  href="/health" 
+                  href="/dashboard/health" 
                   className={`flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
-                    pathname === '/health' 
+                    pathname === '/dashboard/health' 
                       ? 'text-white bg-white/20 shadow-lg shadow-purple-500/20 border border-white/30' 
                       : 'text-gray-200 hover:text-white hover:bg-white/15 hover:shadow-md hover:shadow-blue-500/10'
                   }`}
