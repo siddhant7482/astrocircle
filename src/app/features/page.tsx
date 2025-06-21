@@ -99,15 +99,13 @@ export default function FeaturesPage() {
             </div>
           </div>
 
-          {/* Mobile Menu Button (for future mobile implementation) */}
-          <div className="lg:hidden">
-            <Button
-              variant="ghost"
-              className="text-white p-2"
+          {/* Mobile Navigation */}
+          <div className="lg:hidden flex items-center space-x-2">
+            <Button 
+              onClick={() => router.push('/register')}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-4 py-2 rounded-full text-sm"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              🚀 Start
             </Button>
           </div>
         </div>
@@ -117,20 +115,20 @@ export default function FeaturesPage() {
       </header>
 
       {/* Content */}
-      <div className="relative z-10 py-12 px-6 lg:px-12">
+      <div className="relative z-10 py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Page Header */}
-          <div className="text-center mb-16">
-            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4">
               Cosmic <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Features</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
               Discover the powerful tools and insights that make AstroCircle your ultimate cosmic companion
             </p>
           </div>
 
           {/* Main Features Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
             {/* AI-Powered Analysis */}
             <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-6 hover:bg-white/15 transition-all duration-300 group hover:scale-105">
               <CardHeader>
@@ -241,12 +239,12 @@ export default function FeaturesPage() {
           </div>
 
           {/* Advanced Features Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white text-center mb-12">
+          <div className="mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center mb-6 sm:mb-8 md:mb-12 px-4">
               Advanced <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Capabilities</span>
             </h2>
             
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
               <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-8">
                 <div className="flex items-start space-x-4">
                   <div className="text-3xl">🔮</div>
@@ -284,28 +282,20 @@ export default function FeaturesPage() {
           </div>
 
           {/* CTA Section */}
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">
+          <div className="text-center px-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">
               Ready to Unlock Your <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Cosmic Potential?</span>
             </h2>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">
               Join thousands of users who have discovered their cosmic destiny through AstroCircle&apos;s powerful features.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Button 
                 size="lg"
                 onClick={() => router.push('/register')}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 text-base sm:text-lg w-full sm:w-auto max-w-xs"
               >
                 Start Your Journey 🚀
-              </Button>
-              <Button 
-                size="lg"
-                variant="outline"
-                onClick={() => router.push('/about')}
-                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full font-semibold transition-all duration-300"
-              >
-                Learn More
               </Button>
             </div>
           </div>

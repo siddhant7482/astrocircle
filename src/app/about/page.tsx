@@ -100,16 +100,14 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Mobile Menu Button (for future mobile implementation) */}
-          <div className="lg:hidden">
-            <Button
-              variant="ghost"
-              className="text-white p-2"
+          {/* Mobile Navigation */}
+          <div className="lg:hidden flex items-center space-x-2">
+            <SmoothButton 
+              href="/register"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-4 py-2 rounded-full text-sm"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </Button>
+              🚀 Start
+            </SmoothButton>
           </div>
         </div>
 
@@ -118,25 +116,25 @@ export default function AboutPage() {
       </header>
 
       {/* Content */}
-      <div className="relative z-10 py-12 px-6 lg:px-12">
+      <div className="relative z-10 py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-12">
         <div className="max-w-6xl mx-auto">
           {/* Page Header */}
-          <div className="text-center mb-16">
-            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4">
               About <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">AstroCircle</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
               Where ancient wisdom meets modern technology to unlock your cosmic potential
             </p>
           </div>
 
           {/* Mission Statement */}
-          <div className="mb-16">
-            <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-8 lg:p-12 text-center">
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+          <div className="mb-8 sm:mb-12 md:mb-16">
+            <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-4 sm:p-6 md:p-8 lg:p-12 text-center">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6">
                 Our <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Mission</span>
               </h2>
-              <p className="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
                 AstroCircle bridges the gap between ancient Vedic wisdom and modern artificial intelligence to provide 
                 personalized, accurate, and accessible astrological insights that empower you to make informed decisions 
                 and unlock your true cosmic potential.
@@ -145,12 +143,12 @@ export default function AboutPage() {
           </div>
 
           {/* Story Section */}
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 mb-8 sm:mb-12 md:mb-16">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6 px-4 lg:px-0">
                 The <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Story</span>
               </h2>
-              <div className="space-y-6 text-gray-300 text-lg leading-relaxed">
+              <div className="space-y-4 sm:space-y-6 text-gray-300 text-base sm:text-lg leading-relaxed px-4 lg:px-0">
                 <p>
                   AstroCircle was born from a passion for making the profound wisdom of Vedic astrology accessible 
                   to everyone in our modern digital age. For over 5,000 years, this ancient science has guided 
@@ -169,8 +167,8 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-8">
-              <h3 className="text-2xl font-bold text-white mb-6 text-center">Why AstroCircle?</h3>
+            <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-4 sm:p-6 md:p-8">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">Why AstroCircle?</h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <div className="text-2xl">🔮</div>
@@ -263,21 +261,13 @@ export default function AboutPage() {
             <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
               Join our community of cosmic explorers and discover what the stars have in store for you.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Button 
                 size="lg"
                 onClick={() => router.push('/register')}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
               >
                 Get Started 🚀
-              </Button>
-              <Button 
-                size="lg"
-                variant="outline"
-                onClick={() => router.push('/features')}
-                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full font-semibold transition-all duration-300"
-              >
-                Explore Features
               </Button>
             </div>
           </div>

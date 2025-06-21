@@ -102,16 +102,14 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Mobile Menu Button (for future mobile implementation) */}
-          <div className="lg:hidden">
-            <Button
-              variant="ghost"
-              className="text-white p-2"
+          {/* Mobile Navigation */}
+          <div className="lg:hidden flex items-center space-x-2">
+            <SmoothButton 
+              href="/register"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-4 py-2 rounded-full text-sm"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </Button>
+              🚀 Start
+            </SmoothButton>
           </div>
         </div>
 
@@ -120,38 +118,38 @@ export default function ContactPage() {
       </header>
 
       {/* Content */}
-      <div className="relative z-10 py-12 px-6 lg:px-12">
+      <div className="relative z-10 py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-12">
         <div className="max-w-4xl mx-auto">
           {/* Page Header */}
-          <div className="text-center mb-16">
-            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4">
               Contact <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">Us</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
               Have questions about your cosmic journey? We&apos;re here to help guide you through the stars
             </p>
           </div>
 
           {/* Contact Card */}
           <div className="max-w-2xl mx-auto">
-            <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-8 lg:p-12 text-center hover:bg-white/15 transition-all duration-300">
+            <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-4 sm:p-6 md:p-8 lg:p-12 text-center hover:bg-white/15 transition-all duration-300">
               <CardHeader>
-                <div className="text-6xl mb-6">📧</div>
-                <CardTitle className="text-3xl text-white mb-4">Get in Touch</CardTitle>
+                <div className="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6">📧</div>
+                <CardTitle className="text-xl sm:text-2xl md:text-3xl text-white mb-3 sm:mb-4">Get in Touch</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+                <p className="text-gray-300 text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed">
                   Ready to connect with us? Whether you have questions about your birth chart, need technical support, 
                   or want to share your cosmic experiences, we&apos;d love to hear from you!
                 </p>
                 
-                <div className="bg-white/5 rounded-lg p-6 mb-8 border border-white/10">
-                  <h3 className="text-xl font-semibold text-white mb-4">Email Address</h3>
-                  <div className="flex items-center justify-center space-x-3">
-                    <div className="text-2xl">✉️</div>
+                <div className="bg-white/5 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-white/10">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">Email Address</h3>
+                  <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-3">
+                    <div className="text-xl sm:text-2xl">✉️</div>
                     <a 
                       href="mailto:siddhantbhasin7482@gmail.com"
-                      className="text-purple-300 hover:text-purple-200 font-mono text-lg transition-colors duration-300 hover:underline"
+                      className="text-purple-300 hover:text-purple-200 font-mono text-sm sm:text-base md:text-lg transition-colors duration-300 hover:underline break-all text-center"
                     >
                       siddhantbhasin7482@gmail.com
                     </a>
@@ -161,7 +159,7 @@ export default function ContactPage() {
                 <Button 
                   size="lg"
                   onClick={handleEmailClick}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 text-base sm:text-lg w-full sm:w-auto max-w-xs"
                 >
                   Send Email 📨
                 </Button>
@@ -170,7 +168,7 @@ export default function ContactPage() {
           </div>
 
           {/* Additional Info */}
-          <div className="mt-16 grid md:grid-cols-3 gap-8">
+          <div className="mt-8 sm:mt-12 md:mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-6 text-center hover:bg-white/15 transition-all duration-300">
               <div className="text-3xl mb-4">⚡</div>
               <h3 className="text-lg font-semibold text-white mb-2">Quick Response</h3>

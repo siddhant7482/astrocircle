@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/hooks/use-user";
@@ -136,17 +135,15 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Mobile Menu Button (for future mobile implementation) */}
-            <div className="lg:hidden">
-              <Button
-                variant="ghost"
-                className="text-white p-2"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </Button>
-            </div>
+                      {/* Mobile Navigation */}
+          <div className="lg:hidden flex items-center space-x-2">
+            <SmoothButton 
+              href="/register"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-4 py-2 rounded-full text-sm"
+            >
+              🚀 Start
+            </SmoothButton>
+          </div>
           </div>
 
           {/* Bottom Glow Effect */}
@@ -154,7 +151,7 @@ export default function LandingPage() {
         </header>
 
         {/* Hero Section */}
-        <section className="relative text-center py-20 lg:py-32 px-6 lg:px-12 overflow-hidden">
+        <section className="relative text-center py-12 sm:py-16 md:py-20 lg:py-32 px-4 sm:px-6 lg:px-12 overflow-hidden">
           {/* Hero Background Effects */}
           <div className="absolute inset-0 pointer-events-none">
             {/* Large pulsing orbs */}
@@ -177,16 +174,16 @@ export default function LandingPage() {
             <div className="absolute top-12 right-1/6 text-3xl animate-float-fast opacity-60">🔮</div>
             
             {/* Main heading with enhanced effects */}
-            <div className="relative mb-8">
-              <h2 className="text-6xl lg:text-8xl font-black text-white mb-6 leading-tight relative">
+            <div className="relative mb-6 md:mb-8">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white mb-4 md:mb-6 leading-tight relative">
                 <span className="relative inline-block">
                   Unlock Your
-                  <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 blur-xl rounded-full animate-pulse"></div>
+                  <div className="absolute -inset-2 md:-inset-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 blur-xl rounded-full animate-pulse"></div>
                 </span>
                 <br />
                 <span className="bg-gradient-to-r from-purple-200 via-blue-200 to-purple-300 bg-clip-text text-transparent animate-pulse relative inline-block">
                   Cosmic Destiny
-                  <div className="absolute -inset-2 bg-gradient-to-r from-purple-400/30 to-blue-400/30 blur-lg rounded-full"></div>
+                  <div className="absolute -inset-1 md:-inset-2 bg-gradient-to-r from-purple-400/30 to-blue-400/30 blur-lg rounded-full"></div>
                 </span>
               </h2>
               
@@ -198,13 +195,13 @@ export default function LandingPage() {
             </div>
             
             {/* Enhanced description with glow effect */}
-            <div className="relative mb-12">
-              <p className="text-xl lg:text-2xl text-gray-200 mb-4 leading-relaxed max-w-4xl mx-auto relative">
+            <div className="relative mb-8 md:mb-12">
+              <p className="text-lg sm:text-xl lg:text-2xl text-gray-200 mb-3 md:mb-4 leading-relaxed max-w-4xl mx-auto relative px-4">
                 <span className="bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-medium">
                   Discover the ancient wisdom of Vedic astrology with AI-powered insights.
                 </span>
               </p>
-              <p className="text-lg lg:text-xl text-purple-200 leading-relaxed max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg lg:text-xl text-purple-200 leading-relaxed max-w-3xl mx-auto px-4">
                 Get personalized readings, career guidance, and cosmic predictions tailored just for you.
               </p>
               
@@ -213,15 +210,15 @@ export default function LandingPage() {
             </div>
             
             {/* Enhanced CTA buttons with better visibility */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
               <SmoothButton 
                 href="/register"
                 size="lg"
-                className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-bold px-10 py-5 rounded-full shadow-2xl hover:shadow-purple-500/25 transform hover:scale-110 transition-all duration-500 text-xl border-2 border-purple-400/30 hover:border-purple-300/50"
+                className="group relative bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-700 hover:via-purple-800 hover:to-blue-700 text-white font-bold px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full shadow-2xl hover:shadow-purple-500/25 transform hover:scale-110 transition-all duration-500 text-base sm:text-lg md:text-xl border-2 border-purple-400/30 hover:border-purple-300/50 w-full sm:w-auto"
               >
-                <span className="relative z-10 flex items-center gap-2">
+                <span className="relative z-10 flex items-center justify-center gap-2">
                   Start Your Journey 
-                  <span className="text-2xl group-hover:animate-bounce">🚀</span>
+                  <span className="text-lg sm:text-xl md:text-2xl group-hover:animate-bounce">🚀</span>
                 </span>
                 {/* Button glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
@@ -230,7 +227,7 @@ export default function LandingPage() {
               <SmoothButton 
                 href="/login"
                 size="lg"
-                className="group relative bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-10 py-5 rounded-full border-2 border-white/40 hover:border-white/60 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-xl"
+                className="group relative bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-full border-2 border-white/40 hover:border-white/60 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 text-base sm:text-lg md:text-xl w-full sm:w-auto"
               >
                 <span className="relative z-10 bg-gradient-to-r from-white to-purple-100 bg-clip-text text-transparent font-semibold">
                   Already a Member?
@@ -248,20 +245,20 @@ export default function LandingPage() {
         </section>
 
         {/* Vedic Science Section */}
-        <section className="py-20 px-6 lg:px-12">
+        <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h3 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+            <div className="text-center mb-8 sm:mb-12 md:mb-16">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
                 The Sacred Science of 
                 <span className="bg-gradient-to-r from-orange-300 to-yellow-300 bg-clip-text text-transparent"> Vedic Astrology</span>
               </h3>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
                 For over 5,000 years, Hindu Vedic astrology has guided souls toward their highest potential. 
                 Now, we blend this ancient wisdom with modern AI to bring you precise, personalized insights.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               <Card className="backdrop-blur-sm bg-white/10 border-white/20 text-center p-6 hover:bg-white/15 transition-all duration-300 group">
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">🕉️</div>
                 <h4 className="text-xl font-semibold text-white mb-2">Ancient Wisdom</h4>
@@ -290,19 +287,19 @@ export default function LandingPage() {
         </section>
 
         {/* What We Offer Section */}
-        <section className="py-20 px-6 lg:px-12">
+        <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h3 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+            <div className="text-center mb-8 sm:mb-12 md:mb-16">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
                 Your Complete 
                 <span className="bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent"> Cosmic Toolkit</span>
               </h3>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4">
                 Everything you need to navigate life&apos;s journey with cosmic wisdom and clarity
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               <Card className="backdrop-blur-sm bg-white/10 border-white/20 p-6 hover:bg-white/15 transition-all duration-300 group hover:scale-105">
                 <CardHeader>
                   <div className="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">💼</div>
