@@ -611,7 +611,7 @@ export default function LandingPage() {
             {/* Bottom */}
             <div className="pt-6 sm:pt-8 border-t border-white/10 text-center">
               <p className="text-gray-400 text-xs sm:text-sm">
-                © 2024 Siddhant Bhasin Production. All rights reserved.
+                © 2025 Siddhant Bhasin Production. All rights reserved.
               </p>
             </div>
           </div>
