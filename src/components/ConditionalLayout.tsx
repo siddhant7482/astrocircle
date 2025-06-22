@@ -17,12 +17,26 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const isProtectedPage = pathname?.startsWith('/dashboard') || pathname?.startsWith('/profile');
   const showDashboard = !isLoading && isAuthenticated && !isAuthPage;
 
-  // Handle authentication redirection
+  // Debug: log auth state on production
+  useEffect(() => {
+    console.log('ConditionalLayout Auth Debug:', {
+      pathname,
+      isLoading,
+      isAuthenticated,
+      isAuthPage,
+      isProtectedPage,
+      showDashboard,
+      timestamp: new Date().toISOString()
+    });
+  }, [pathname, isLoading, isAuthenticated, isAuthPage, isProtectedPage, showDashboard]);
+
+  // Handle authentication redirection with improved logic
   useEffect(() => {
     if (!isLoading && !isAuthenticated && isProtectedPage) {
+      console.log('Redirecting unauthenticated user to login from protected page:', pathname);
       router.push('/login');
     }
-  }, [isAuthenticated, isLoading, isProtectedPage, router]);
+  }, [isAuthenticated, isLoading, isProtectedPage, router, pathname]);
 
   // Handle dashboard background effects
   useEffect(() => {
@@ -120,31 +134,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Debug: log auth state on production
-  useEffect(() => {
-    console.log('ConditionalLayout Auth Debug:', {
-      pathname,
-      isLoading,
-      isAuthenticated,
-      isAuthPage,
-      isProtectedPage,
-      showDashboard,
-      timestamp: new Date().toISOString()
-    });
-  }, [pathname, isLoading, isAuthenticated, isAuthPage, isProtectedPage, showDashboard]);
 
-  // Handle authentication redirection with improved logic
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated && isProtectedPage) {
-      console.log('Redirecting unauthenticated user to login from protected page:', pathname);
-      router.push('/login');
-    }
-  }, [isAuthenticated, isLoading, isProtectedPage, router, pathname]);
-
-  // Don't show redirect screen immediately - let the useEffect handle the redirect
-  if (!isLoading && !isAuthenticated && isProtectedPage) {
-    return null; // Return null briefly while redirect happens
-  }
 
   // For auth pages or when not authenticated, just return the children without dashboard layout
   if (!showDashboard) {
