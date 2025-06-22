@@ -134,8 +134,8 @@ export default function DisclaimerPage() {
                         used solely to improve website functionality and user experience.
                       </p>
                       <p className="text-blue-100 mt-2">
-                        <strong>Your Privacy:</strong> You can opt out of this tracking at any time by using browser 
-                        privacy settings or installing Google's opt-out add-on.
+                                                 <strong>Your Privacy:</strong> You can opt out of this tracking at any time by using browser 
+                         privacy settings or installing Google&apos;s opt-out add-on.
                       </p>
                     </div>
                     <p className="text-sm text-gray-400">
