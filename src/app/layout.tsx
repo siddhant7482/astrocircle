@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
 import { ConditionalLayout } from "@/components/ConditionalLayout";
@@ -53,6 +54,7 @@ export default function RootLayout({
             </ConditionalLayout>
           </NavigationProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
