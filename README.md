@@ -1131,14 +1131,6 @@ git push origin feature/new-feature
 
 All rights reserved.
 
-## 📞 Support
-
-For support and questions:
-- 📧 Email: support@astrocircle.com
-- 📖 Documentation: [docs.astrocircle.com](https://docs.astrocircle.com)
-- 🐛 Issues: [GitHub Issues](https://github.com/your-username/astrocircle/issues)
-- 💬 Community: [Discord Server](https://discord.gg/astrocircle)
-
 ---
 
 **AstroCircle** - Bringing ancient Vedic wisdom to the modern digital age through cutting-edge technology and AI-powered insights. ✨🌟
