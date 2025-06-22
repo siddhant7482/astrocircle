@@ -120,16 +120,30 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Handle unauthenticated users on protected pages
+  // Debug: log auth state on production
+  useEffect(() => {
+    console.log('ConditionalLayout Auth Debug:', {
+      pathname,
+      isLoading,
+      isAuthenticated,
+      isAuthPage,
+      isProtectedPage,
+      showDashboard,
+      timestamp: new Date().toISOString()
+    });
+  }, [pathname, isLoading, isAuthenticated, isAuthPage, isProtectedPage, showDashboard]);
+
+  // Handle authentication redirection with improved logic
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && isProtectedPage) {
+      console.log('Redirecting unauthenticated user to login from protected page:', pathname);
+      router.push('/login');
+    }
+  }, [isAuthenticated, isLoading, isProtectedPage, router, pathname]);
+
+  // Don't show redirect screen immediately - let the useEffect handle the redirect
   if (!isLoading && !isAuthenticated && isProtectedPage) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-        <div className="text-center">
-          <div className="text-white mb-4">Redirecting to login...</div>
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent mx-auto"></div>
-        </div>
-      </div>
-    );
+    return null; // Return null briefly while redirect happens
   }
 
   // For auth pages or when not authenticated, just return the children without dashboard layout
