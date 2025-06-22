@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function middleware(_request: NextRequest) {
+export function middleware() {
   // Simplified: Don't redirect based on cookies in middleware
   // Let the client-side authentication handle redirects
   // This prevents redirect loops with invalid/expired sessions
