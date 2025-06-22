@@ -5,24 +5,12 @@ export function middleware(request: NextRequest) {
   // Get the pathname
   const pathname = request.nextUrl.pathname
 
-  // Check if user has session cookie
-  const sessionId = request.cookies.get('session_id')
-  const isAuthenticated = !!sessionId
+  // Simplified: Don't redirect based on cookies in middleware
+  // Let the client-side authentication handle redirects
+  // This prevents redirect loops with invalid/expired sessions
 
-  // Define protected routes
-  const protectedRoutes = ['/dashboard', '/profile', '/chat', '/astro-report', '/career', '/health', '/relationships']
-  const authRoutes = ['/login', '/register', '/signup']
-
-  // If user is trying to access protected routes without auth
-  if (protectedRoutes.some(route => pathname.startsWith(route)) && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-
-  // If user is authenticated and trying to access auth routes, redirect to dashboard
-  if (authRoutes.some(route => pathname.startsWith(route)) && isAuthenticated) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
-  }
-
+  // Let client-side authentication handle all redirects
+  // This prevents middleware redirect loops with invalid sessions
   return NextResponse.next()
 }
 
