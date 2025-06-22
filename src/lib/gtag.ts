@@ -30,9 +30,30 @@ export const event = ({
   }
 };
 
-// Declare gtag function for TypeScript
+// TypeScript declarations for gtag
+type GtagCommand = 'config' | 'event' | 'js';
+
+type GtagConfigParams = {
+  page_location?: string;
+  page_title?: string;
+  page_path?: string;
+  send_page_view?: boolean;
+};
+
+type GtagEventParams = {
+  event_category?: string;
+  event_label?: string;
+  value?: number;
+  custom_parameter?: string;
+};
+
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (
+      command: GtagCommand,
+      targetIdOrAction: string | Date,
+      parameters?: GtagConfigParams | GtagEventParams
+    ) => void;
+    dataLayer: unknown[];
   }
 } 
