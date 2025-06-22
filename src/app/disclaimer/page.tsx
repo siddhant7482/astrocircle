@@ -120,6 +120,32 @@ export default function DisclaimerPage() {
                 </section>
 
                 <section>
+                  <h2 className="text-2xl font-semibold text-white mb-4">Data Collection and Analytics</h2>
+                  <div className="space-y-4">
+                    <p>
+                      AstroCircle uses Google Analytics to collect anonymous usage data to improve our services. 
+                      This is a standard practice for websites and helps us understand how users interact with our platform.
+                    </p>
+                    <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4">
+                      <h3 className="text-blue-300 font-semibold mb-2">📊 Analytics Disclaimer</h3>
+                      <p className="text-blue-100">
+                        By using this website, you acknowledge that Google Analytics (tracking ID: G-TZRV127JSN) 
+                        may collect data about your visit for statistical purposes. This data is anonymized and 
+                        used solely to improve website functionality and user experience.
+                      </p>
+                      <p className="text-blue-100 mt-2">
+                        <strong>Your Privacy:</strong> You can opt out of this tracking at any time by using browser 
+                        privacy settings or installing Google's opt-out add-on.
+                      </p>
+                    </div>
+                    <p className="text-sm text-gray-400">
+                      As a personal project, we are transparent about all data collection and give users full control 
+                      over their privacy preferences.
+                    </p>
+                  </div>
+                </section>
+
+                <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">Limitation of Liability</h2>
                   <p>
                     AstroCircle and its creators shall not be liable for any direct, indirect, incidental, 

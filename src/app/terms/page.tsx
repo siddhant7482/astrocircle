@@ -87,11 +87,27 @@ export default function TermsPage() {
 
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">4. Privacy and Data Protection</h2>
-                  <p>
-                    Your privacy is important to us. We collect and use your personal information in accordance with 
-                    our Privacy Policy. By using our service, you consent to the collection and use of your information 
-                    as outlined in our Privacy Policy.
-                  </p>
+                  <div className="space-y-4">
+                    <p>
+                      Your privacy is important to us. We collect and use your personal information in accordance with 
+                      our Privacy Policy. By using our service, you consent to the collection and use of your information 
+                      as outlined in our Privacy Policy.
+                    </p>
+                    <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4">
+                      <h3 className="text-blue-300 font-semibold mb-2">📊 Google Analytics Notice</h3>
+                      <p className="text-blue-100">
+                        We use Google Analytics (G-TZRV127JSN) to analyze website usage and improve our services. 
+                        This service may collect information about your visits, including pages viewed, time spent, 
+                        and general location data. By using our website, you agree to this data collection.
+                      </p>
+                      <p className="text-blue-100 mt-2">
+                        You can opt out of Google Analytics by installing the 
+                        <a href="https://tools.google.com/dlpage/gaoptout" className="text-purple-300 hover:text-white underline ml-1" target="_blank" rel="noopener noreferrer">
+                          Google Analytics Opt-out Browser Add-on
+                        </a> or disabling cookies in your browser.
+                      </p>
+                    </div>
+                  </div>
                 </section>
 
                 <section>

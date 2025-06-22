@@ -109,15 +109,69 @@ export default function PrivacyPage() {
                 </section>
 
                 <section>
-                  <h2 className="text-2xl font-semibold text-white mb-4">6. Cookies and Tracking</h2>
-                  <p>
-                    We use cookies and similar technologies to enhance your experience on our website, analyze usage 
-                    patterns, and provide personalized content. You can control cookie settings through your browser.
-                  </p>
+                  <h2 className="text-2xl font-semibold text-white mb-4">6. Google Analytics and Data Collection</h2>
+                  <div className="space-y-4">
+                    <p>
+                      We use Google Analytics (tracking ID: G-TZRV127JSN) to collect information about how visitors use our website. 
+                      This helps us understand user behavior and improve our services.
+                    </p>
+                    <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4">
+                      <h3 className="text-blue-300 font-semibold mb-2">📊 What Google Analytics Collects:</h3>
+                      <ul className="list-disc pl-6 space-y-1 text-blue-100">
+                        <li>Pages you visit and how long you spend on them</li>
+                        <li>How you arrived at our site (search engines, direct links, etc.)</li>
+                        <li>Your general location (country/city level, not precise)</li>
+                        <li>Device and browser information</li>
+                        <li>Basic demographic information (age range, interests)</li>
+                        <li>User interactions and events on our website</li>
+                      </ul>
+                    </div>
+                    <p>
+                      <strong>Google Analytics Data Retention:</strong> We retain Analytics data for 26 months. 
+                      Google may also retain this data according to their own policies.
+                    </p>
+                    <p>
+                      <strong>Opting Out:</strong> You can opt out of Google Analytics tracking by:
+                    </p>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Installing the <a href="https://tools.google.com/dlpage/gaoptout" className="text-purple-300 hover:text-white underline" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a></li>
+                      <li>Disabling cookies in your browser settings</li>
+                      <li>Using browser privacy/incognito mode</li>
+                    </ul>
+                    <p className="text-sm text-gray-400">
+                      For more information about Google Analytics privacy practices, visit: 
+                      <a href="https://policies.google.com/privacy" className="text-purple-300 hover:text-white underline ml-1" target="_blank" rel="noopener noreferrer">
+                        Google Privacy Policy
+                      </a>
+                    </p>
+                  </div>
                 </section>
 
                 <section>
-                  <h2 className="text-2xl font-semibold text-white mb-4">7. Contact Us</h2>
+                  <h2 className="text-2xl font-semibold text-white mb-4">7. Cookies and Tracking Technologies</h2>
+                  <div className="space-y-4">
+                    <p>
+                      We use cookies and similar technologies to enhance your experience on our website, analyze usage 
+                      patterns, and provide personalized content.
+                    </p>
+                    <div className="bg-purple-500/20 border border-purple-400/30 rounded-lg p-4">
+                      <h3 className="text-purple-300 font-semibold mb-2">🍪 Types of Cookies We Use:</h3>
+                      <ul className="list-disc pl-6 space-y-1 text-purple-100">
+                        <li><strong>Essential Cookies:</strong> Required for basic website functionality and authentication</li>
+                        <li><strong>Analytics Cookies:</strong> Google Analytics cookies to understand site usage</li>
+                        <li><strong>Performance Cookies:</strong> Help us improve website speed and performance</li>
+                        <li><strong>Functional Cookies:</strong> Remember your preferences and settings</li>
+                      </ul>
+                    </div>
+                    <p>
+                      You can control cookie settings through your browser preferences. Note that disabling certain 
+                      cookies may affect website functionality.
+                    </p>
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="text-2xl font-semibold text-white mb-4">8. Contact Us</h2>
                   <p>
                     If you have any questions about this Privacy Policy or our data practices, please contact us 
                     through our website or customer support channels.
