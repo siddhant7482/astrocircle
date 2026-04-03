@@ -1135,4 +1135,4 @@ All rights reserved.
 
 **AstroCircle** - Bringing ancient Vedic wisdom to the modern digital age through cutting-edge technology and AI-powered insights. ✨🌟
 
-**siddhant bhasin production**
+**Siddhant Bhasin Production**
